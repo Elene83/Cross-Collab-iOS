@@ -1,24 +1,19 @@
-//
-//  ContentView.swift
-//  EventManager
-//
-//  Created by Eorime on 20.12.25.
-//
+
 
 import SwiftUI
 
-struct ContentView: View {
+struct HomeView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("Hello, home!")
         }
         .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    MainTabView()
 }
