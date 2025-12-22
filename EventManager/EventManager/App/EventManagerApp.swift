@@ -11,7 +11,7 @@ import SwiftUI
 struct EventManagerApp: App {
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            AppCoordinatorView()
         }
     }
 }
