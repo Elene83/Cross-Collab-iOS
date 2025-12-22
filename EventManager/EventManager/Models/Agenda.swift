@@ -5,5 +5,4 @@ struct EventAgenda: Hashable, Codable, Identifiable {
     var time: Date
     var title: String
     var description: String
-    
 }
