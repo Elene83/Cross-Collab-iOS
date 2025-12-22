@@ -3,7 +3,7 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            HomeView()
+            HomeView(vm: HomeView.ViewModel())
                 .tabItem {
                     Label("Home", image: "HomeIcon")
                 }
@@ -23,11 +23,6 @@ struct MainTabView: View {
                     Label("Updates", image: "UpdatesIcon")
                 }
                 .tag(3)
-            ProfileView()
-                .tabItem {
-                    Label("Profile", image: "ProfileIcon")
-                }
-                .tag(4)
         }
     }
 }

@@ -8,6 +8,5 @@ struct BrowseView: View {
                 .foregroundStyle(.tint)
             Text("Hello, browse!")
         }
-        .padding()
     }
 }

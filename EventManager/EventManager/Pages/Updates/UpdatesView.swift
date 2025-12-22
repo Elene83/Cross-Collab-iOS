@@ -8,6 +8,5 @@ struct UpdatesView: View {
                 .foregroundStyle(.tint)
             Text("Hello, updates!")
         }
-        .padding()
     }
 }

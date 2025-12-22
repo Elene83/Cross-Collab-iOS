@@ -8,6 +8,5 @@ struct ProfileView: View {
                 .foregroundStyle(.tint)
             Text("Hello, profile!")
         }
-        .padding()
     }
 }
