@@ -8,6 +8,5 @@ struct EventsView: View {
                 .foregroundStyle(.tint)
             Text("Hello, events!")
         }
-        .padding()
     }
 }
