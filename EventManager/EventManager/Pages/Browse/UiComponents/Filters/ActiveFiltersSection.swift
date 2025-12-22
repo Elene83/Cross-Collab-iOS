@@ -1,0 +1,25 @@
+//
+//  ActiveFiltersSection.swift
+//  EventManager
+//
+//  Created by Atinati on 21.12.25.
+//
+
+import SwiftUI
+
+struct ActiveFiltersSection: View {
+    let activeFiltersCount: Int
+    
+    var body: some View {
+        Section {
+            HStack {
+                Text("Active Filters")
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text("\(activeFiltersCount)")
+                    .fontWeight(.semibold)
+                    .foregroundColor(.blue)
+            }
+        }
+    }
+}
