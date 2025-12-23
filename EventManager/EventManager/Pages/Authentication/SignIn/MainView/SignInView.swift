@@ -1,19 +1,9 @@
-//
-//  SignInView.swift
-//  EventManager
-//
-//  Created by Atinati on 20.12.25.
-//
-
 import SwiftUI
 
 struct SignInView: View {
     @EnvironmentObject var coordinator: AuthCoordinator
     @EnvironmentObject var appCoordinator: AppCoordinator
-    
-    @State private var email = ""
-    @State private var password = ""
-    @State private var rememberMe = false
+    @State private var viewModel = SignInViewModel()
     @State private var showPassword = false
     
     var body: some View {
@@ -22,27 +12,44 @@ struct SignInView: View {
                 SignInHeaderView()
                 
                 VStack(alignment: .leading, spacing: 24) {
-                    SignInEmailField(email: $email)
+                    SignInEmailField(email: $viewModel.email)
                     
-                    SignInPasswordField(password: $password, showPassword: $showPassword)
+                    SignInPasswordField(
+                        password: $viewModel.password,
+                        showPassword: $showPassword
+                    )
                     
                     RememberMeForgotSection(
-                        rememberMe: $rememberMe,
+                        rememberMe: .constant(false),
                         onForgotPassword: {
                             coordinator.push(.forgotPassword)
                         }
-                )
+                    )
+                    
                     Button(action: {
-                        appCoordinator.login()
+                        Task {
+                            await viewModel.signIn()
+                            if TokenManager.shared.isLoggedIn() {
+                                appCoordinator.login()
+                            }
+                        }
                     }) {
-                        Text("Sign In")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(Color.appViolet)
-                            .cornerRadius(8)
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .tint(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                        } else {
+                            Text("Sign In")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                        }
                     }
+                    .background(Color.appViolet)
+                    .cornerRadius(8)
+                    .disabled(viewModel.isLoading)
                     .padding(.top, 8)
                     
                     SignUpPromptView(onSignUp: {
@@ -53,6 +60,11 @@ struct SignInView: View {
                 .padding(.horizontal, 32)
                 .padding(.bottom, 40)
             }
+        }
+        .alert("Error", isPresented: $viewModel.showError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.errorMessage ?? "An error occurred")
         }
     }
 }

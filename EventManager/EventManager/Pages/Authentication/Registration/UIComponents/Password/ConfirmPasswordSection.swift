@@ -1,10 +1,3 @@
-//
-//  ConfirmPasswordSection.swift
-//  EventManager
-//
-//  Created by Atinati on 20.12.25.
-//
-
 import SwiftUI
 
 struct ConfirmPasswordSection: View {

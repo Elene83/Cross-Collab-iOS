@@ -1,10 +1,3 @@
-//
-//  ErrorHandling.swift
-//  EventManager
-//
-//  Created by Atinati on 22.12.25.
-//
-
 import Foundation
 
 @MainActor

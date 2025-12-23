@@ -1,10 +1,3 @@
-//
-//  ActionButton.swift
-//  EventManager
-//
-//  Created by Atinati on 21.12.25.
-//
-
 import SwiftUI
 
 struct ActionButton: View {
