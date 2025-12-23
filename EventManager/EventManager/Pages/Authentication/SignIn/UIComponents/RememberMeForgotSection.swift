@@ -17,10 +17,10 @@ struct RememberMeForgotSection: View {
                 HStack(spacing: 8) {
                     Image(systemName: rememberMe ? "checkmark.square" : "square")
                         .font(.system(size: 18))
-                        .foregroundColor(rememberMe ? .primary : .gray)
+                        .foregroundColor(rememberMe ? .appViolet : .gray)
                     Text("Remember me")
                         .font(.system(size: 14))
-                        .foregroundColor(.primary)
+                        .foregroundColor(.appDarkGray)
                 }
             }
             
@@ -28,7 +28,7 @@ struct RememberMeForgotSection: View {
             
             Button("Forgot password?", action: onForgotPassword)
                 .font(.system(size: 14))
-                .foregroundColor(.primary)
+                .foregroundColor(.appDarkGray)
         }
     }
 }

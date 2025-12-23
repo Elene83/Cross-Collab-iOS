@@ -34,9 +34,12 @@ struct DepartmentSection: View {
                 }
                 .frame(height: 48)
                 .padding(.horizontal, 16)
-                .background(Color(.systemGray6))
+                .background(Color(.appBlue).opacity(0.10))
                 .cornerRadius(8)
             }
         }
     }
+}
+#Preview {
+    RegistrationView()
 }

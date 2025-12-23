@@ -33,7 +33,7 @@ struct UpdatesView: View {
                 .background(Color(.systemBackground))
                 
                 ScrollView {
-                    LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                    LazyVStack(spacing: 16, pinnedViews: [.sectionHeaders]) {
                         ForEach(viewModel.groupedNotifications) { group in
                             Section(header: UpdateSectionHeader(title: group.title)) {
                                 ForEach(group.notifications) { notification in
@@ -50,12 +50,13 @@ struct UpdatesView: View {
                                         }
                                     )
                                     .id("\(notification.id)-\(viewModel.readNotificationIds.count)")
+                                    
                                 }
                             }
                         }
                     }
                 }
-                .background(Color(.systemGray6))
+                .padding(.horizontal, 16)
             }
             .navigationTitle("Notifications")
             .navigationBarTitleDisplayMode(.inline)

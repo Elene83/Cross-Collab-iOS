@@ -15,6 +15,7 @@ struct BackToSignInButton: View {
             HStack(spacing: 8) {
                 Image(systemName: "arrow.left")
                     .font(.system(size: 14))
+                    .foregroundStyle(Color.appViolet)
                 Text("Back to Sign In")
                     .font(.system(size: 16))
             }

@@ -14,10 +14,14 @@ struct SignInHeaderView: View {
                 .font(.system(size: 28, weight: .semibold))
             Text("Enter your credentials to access your account")
                 .font(.system(size: 15))
-                .foregroundColor(.gray)
+                .foregroundColor(.appDarkGray)
                 .multilineTextAlignment(.center)
         }
         .padding(.top, 80)
         .padding(.bottom, 40)
     }
+}
+
+#Preview {
+    SignInView()
 }

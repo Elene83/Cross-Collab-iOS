@@ -13,5 +13,6 @@ struct ApplyButton: View {
     var body: some View {
         Button("Apply", action: action)
             .fontWeight(.semibold)
+            .foregroundStyle(Color.appViolet)
     }
 }

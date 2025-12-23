@@ -15,28 +15,29 @@ struct ErrorView: View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 50))
-                .foregroundColor(.red)
+                .foregroundColor(.appRed)
             
             Text("Something went wrong")
                 .font(.headline)
-                .foregroundColor(.primary)
+                .foregroundColor(.appGray)
             
             Text(errorMessage)
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(.appDarkGray)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
             
             Button(action: retryAction) {
                 HStack(spacing: 8) {
                     Image(systemName: "arrow.clockwise")
+                        .foregroundStyle(Color.appViolet)
                     Text("Retry")
                 }
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 12)
-                .background(Color.blue)
+                .background(Color.appViolet)
                 .cornerRadius(10)
             }
         }

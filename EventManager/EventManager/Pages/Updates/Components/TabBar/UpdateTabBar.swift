@@ -18,14 +18,19 @@ struct UpdateTabItem: View {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(isSelected ? .semibold : .regular)
-                    .foregroundColor(isSelected ? .primary : .secondary)
+                    .foregroundColor(isSelected ? .appViolet : .secondary)
                 
                 if isSelected {
                     Rectangle()
                         .frame(height: 2)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.appViolet)
+                    
                 }
             }
         }
     }
+}
+
+#Preview {
+    UpdatesView()
 }

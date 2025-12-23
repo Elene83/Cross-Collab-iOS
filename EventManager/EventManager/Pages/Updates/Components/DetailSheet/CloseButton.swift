@@ -14,7 +14,7 @@ struct CloseButton: View {
         Button(action: action) {
             Text("Close")
                 .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.primary)
+                .foregroundColor(.appDarkGray)
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
         }

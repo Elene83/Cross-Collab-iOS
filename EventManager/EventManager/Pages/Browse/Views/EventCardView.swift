@@ -16,8 +16,7 @@ struct EventCardView: View {
             EventDetailsColumn(event: event)
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .background(Color(.appBlue.opacity(0.10))
+            .cornerRadius(16))
     }
 }

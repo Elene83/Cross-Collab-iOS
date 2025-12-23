@@ -15,16 +15,14 @@ struct DateBadgeView: View {
     }
     
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 2,) {
             Text(dateComponents.month)
                 .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundColor(.gray)
+                .foregroundColor(.appViolet)
             
             Text(dateComponents.day)
                 .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(.appViolet)
         }
         .frame(width: 60)
     }

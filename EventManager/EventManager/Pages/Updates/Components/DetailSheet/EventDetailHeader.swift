@@ -19,19 +19,19 @@ struct EventDetailHeader: View {
             HStack(spacing: 8) {
                 Image(systemName: "calendar")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appViolet)
                 Text(event.date)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appDarkGray)
             }
             
             HStack(spacing: 8) {
                 Image(systemName: "location")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appViolet)
                 Text(event.location)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appDarkGray)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

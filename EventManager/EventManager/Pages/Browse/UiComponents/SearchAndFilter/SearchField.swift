@@ -13,13 +13,14 @@ struct SearchField: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
+                .foregroundColor(.appViolet)
             
             TextField("Search events...", text: $searchText)
                 .textFieldStyle(.plain)
         }
         .padding(12)
-        .background(Color(.systemGray6))
+        .background(Color(.appBlue).opacity(0.10))
         .cornerRadius(12)
     }
 }
+

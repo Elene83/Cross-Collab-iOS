@@ -19,7 +19,7 @@ struct ForgotPasswordEmailField: View {
             HStack(spacing: 12) {
                 Image(systemName: "envelope")
                     .font(.system(size: 18))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.appViolet)
                 
                 TextField("Enter your email", text: $email)
                     .font(.system(size: 16))

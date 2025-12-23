@@ -14,11 +14,11 @@ struct ActiveFiltersSection: View {
         Section {
             HStack {
                 Text("Active Filters")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.appDarkGray)
                 Spacer()
                 Text("\(activeFiltersCount)")
                     .fontWeight(.semibold)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.appBlue)
             }
         }
     }

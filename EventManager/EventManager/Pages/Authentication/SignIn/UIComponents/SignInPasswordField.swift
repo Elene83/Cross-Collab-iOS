@@ -27,13 +27,20 @@ struct SignInPasswordField: View {
                 Button(action: { showPassword.toggle() }) {
                     Image(systemName: showPassword ? "eye.slash" : "eye")
                         .font(.system(size: 14))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.appViolet)
                 }
             }
             .padding()
             .frame(height: 48)
-            .background(Color(.systemGray6))
             .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color(.systemGray4), lineWidth: 1)
+            )
         }
     }
+}
+
+#Preview {
+    SignInView()
 }

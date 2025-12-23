@@ -13,9 +13,8 @@ struct UpdateIcon: View {
     var body: some View {
         Image(systemName: systemName)
             .font(.system(size: 20))
-            .foregroundColor(.primary)
-            .frame(width: 40, height: 40)
-            .background(Color(.systemGray5))
+            .foregroundColor(.appViolet)
+            .frame(width: 32, height: 32)
             .clipShape(Circle())
     }
 }

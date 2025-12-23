@@ -44,7 +44,7 @@ struct PhoneNumberSection: View {
                         .foregroundColor(.primary)
                         .frame(height: 48)
                         .padding(.horizontal, 20)
-                        .background(Color(.systemGray6))
+                        .background(Color(.appBlue).opacity(0.10))
                         .cornerRadius(8)
                 }
             }
@@ -52,7 +52,7 @@ struct PhoneNumberSection: View {
             if hasInvalidInput {
                 Text("Only numbers are allowed")
                     .font(.system(size: 12))
-                    .foregroundColor(.red)
+                    .foregroundColor(.appRed)
             }
         }
     }

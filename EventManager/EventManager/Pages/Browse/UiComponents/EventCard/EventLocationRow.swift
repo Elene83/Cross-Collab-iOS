@@ -14,10 +14,12 @@ struct EventLocationRow: View {
         HStack(spacing: 4) {
             Image(systemName: "location")
                 .font(.caption)
+                .foregroundStyle(Color.appViolet)
             Text(location)
                 .font(.caption)
                 .lineLimit(1)
+                .foregroundStyle(Color.appDarkGray)
         }
-        .foregroundColor(.secondary)
+        .foregroundColor(.appDarkGray)
     }
 }

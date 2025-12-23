@@ -16,12 +16,12 @@ struct ConfirmPasswordSection: View {
             HStack {
                 Text("Confirm Password")
                     .font(.system(size: 14))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.appDarkGray)
                 Spacer()
                 Button(action: { showConfirmPassword.toggle() }) {
                     Image(systemName: showConfirmPassword ? "eye.slash" : "eye")
                         .font(.system(size: 14))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.appViolet)
                 }
             }
             

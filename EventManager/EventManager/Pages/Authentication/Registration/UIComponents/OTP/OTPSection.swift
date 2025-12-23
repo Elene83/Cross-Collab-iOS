@@ -16,10 +16,10 @@ struct OTPSection: View {
             HStack(spacing: 4) {
                 Image("OtpIcon")
                     .font(.system(size: 12))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(Color.appViolet)
                 Text("Enter OTP Code")
                     .font(.system(size: 14))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.appDarkGray)
             }
             
             HStack(spacing: 12) {
@@ -31,12 +31,16 @@ struct OTPSection: View {
             HStack {
                 Text("Code expires in 00:\(String(format: "%02d", timeRemaining))")
                     .font(.system(size: 13))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.appDarkGray)
                 Spacer()
                 Button("Resend Code") {}
                     .font(.system(size: 13))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.appDarkGray)
             }
         }
     }
+}
+
+#Preview {
+    RegistrationView()
 }

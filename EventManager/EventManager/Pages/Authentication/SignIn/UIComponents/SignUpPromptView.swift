@@ -14,10 +14,10 @@ struct SignUpPromptView: View {
         HStack(spacing: 4) {
             Text("Don't have an account?")
                 .font(.system(size: 14))
-                .foregroundColor(.gray)
+                .foregroundColor(.appDarkGray)
             Button("Sign up", action: onSignUp)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.primary)
+                .foregroundColor(.appViolet)
         }
         .frame(maxWidth: .infinity)
     }
