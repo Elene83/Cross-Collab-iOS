@@ -9,10 +9,11 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class FilteredCategoryViewModel: ObservableObject, ErrorHandling {
-    @Published var events: [EventListDto] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String?
+@Observable
+class FilteredCategoryViewModel: ErrorHandling {
+    var events: [EventListDto] = []
+    var isLoading = false
+    var errorMessage: String?
     
     private let apiService: APIServiceProtocol
     

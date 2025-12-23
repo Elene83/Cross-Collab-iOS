@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UpdatesView: View {
-    @StateObject private var viewModel = UpdatesViewModel()
+    @State private var viewModel = UpdatesViewModel()
     @State private var selectedEvent: UpdateEventDetail?
     @State private var selectedNotificationId: Int?
     

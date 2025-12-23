@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BrowseView: View {
-    @StateObject private var viewModel = BrowseEventsViewModel()
+    @State private var viewModel = BrowseEventsViewModel()
     @State private var selectedEventTypeForDetail: EventTypeDto?
     
     var body: some View {

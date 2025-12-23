@@ -27,8 +27,7 @@ class MockDataManager {
         EventTypeDto(id: 3, name: "Sports", description: "Physical activities and sports events"),
         EventTypeDto(id: 4, name: "Happy Friday", description: "End of week celebrations"),
         EventTypeDto(id: 5, name: "Cultural", description: "Cultural and diversity events"),
-        EventTypeDto(id: 6, name: "Training", description: "Professional training sessions"),
-        EventTypeDto(id: 7, name: "Social", description: "Social networking events")
+        EventTypeDto(id: 6, name: "Wellness", description: "Professional training sessions")
     ]
     
     let mockTags: [String] = [
@@ -84,18 +83,6 @@ class MockDataManager {
             isFull: false,
             imageUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018",
             tags: ["outdoor", "wellness"]
-        ),
-        EventListDto(
-            id: 5,
-            title: "Leadership Training Program",
-            eventTypeName: "Training",
-            startDateTime: "2025-01-15T09:00:00Z",
-            location: "Conference Center, Tbilisi",
-            capacity: 25,
-            confirmedCount: 20,
-            isFull: false,
-            imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978",
-            tags: ["learning", "indoor"]
         ),
         EventListDto(
             id: 6,
