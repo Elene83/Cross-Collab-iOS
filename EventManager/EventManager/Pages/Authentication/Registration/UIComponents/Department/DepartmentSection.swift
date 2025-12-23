@@ -1,32 +1,29 @@
-//
-//  DepartmentSection.swift
-//  EventManager
-//
-//  Created by Atinati on 20.12.25.
-//
-
 import SwiftUI
 
 struct DepartmentSection: View {
-    @Binding var selectedDepartment: String
+    @Binding var selectedDepartmentId: Int  
+    
+    private var selectedDepartmentName: String {
+        Department.from(id: selectedDepartmentId)?.name ?? "Select Department"
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Department")
                 .font(.system(size: 14))
                 .foregroundColor(.primary)
+            
             Menu {
-                Button("Engineering") { selectedDepartment = "Engineering" }
-                Button("Marketing") { selectedDepartment = "Marketing" }
-                Button("Sales") { selectedDepartment = "Sales" }
-                Button("Customer Service") { selectedDepartment = "Customer Service"}
-                Button ("IT") { selectedDepartment = "IT"}
-                Button("HR") { selectedDepartment = "HR" }
+                ForEach(Department.allCases) { department in
+                    Button(department.name) {
+                        selectedDepartmentId = department.id
+                    }
+                }
             } label: {
                 HStack {
-                    Text(selectedDepartment)
+                    Text(selectedDepartmentName)
                         .font(.system(size: 15))
-                        .foregroundColor(selectedDepartment == "Select Department" ? .gray : .primary)
+                        .foregroundColor(selectedDepartmentId == 0 ? .gray : .primary)
                     Spacer()
                     Image(systemName: "chevron.down")
                         .font(.system(size: 12))
@@ -39,7 +36,4 @@ struct DepartmentSection: View {
             }
         }
     }
-}
-#Preview {
-    RegistrationView()
 }

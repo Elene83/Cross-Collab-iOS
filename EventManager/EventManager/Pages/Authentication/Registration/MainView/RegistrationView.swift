@@ -1,28 +1,12 @@
-//
-//  RegistrationView.swift
-//  EventManager
-//
-//  Created by Atinati on 20.12.25.
-//
-
 import SwiftUI
 
 struct RegistrationView: View {
     @EnvironmentObject var coordinator: AuthCoordinator
     @EnvironmentObject var appCoordinator: AppCoordinator
-    
-    @State private var firstName = ""
-    @State private var lastName = ""
-    @State private var email = ""
-    @State private var phoneNumber = ""
-    @State private var otpCode = ["", "", "", "", "", ""]
-    @State private var selectedDepartment = "Select Department"
-    @State private var password = ""
-    @State private var confirmPassword = ""
-    @State private var agreedToTerms = false
-    @State private var timeRemaining = 50
+    @State private var viewModel = RegistrationViewModel()
     @State private var showPassword = false
     @State private var showConfirmPassword = false
+    @State private var timeRemaining = 50
     @State private var otpSent = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -41,28 +25,43 @@ struct RegistrationView: View {
                 .padding(.bottom, 32)
                 
                 VStack(alignment: .leading, spacing: 24) {
-                    NameFieldsSection(firstName: $firstName, lastName: $lastName)
+                    NameFieldsSection(
+                        firstName: $viewModel.firstName,
+                        lastName: $viewModel.lastName
+                    )
                     
-                    EmailSection(email: $email)
+                    EmailSection(email: $viewModel.email)
                     
-                    PhoneNumberSection(phoneNumber: $phoneNumber, onSendOTP: {
-                        otpSent = true
-                        timeRemaining = 50
-                    })
+                    PhoneNumberSection(
+                        phoneNumber: $viewModel.phoneNumber,
+                        onSendOTP: {
+                            otpSent = true
+                            timeRemaining = 50
+                        }
+                    )
                     
-                    OTPSection(otpCode: $otpCode, timeRemaining: $timeRemaining)
+                    OTPSection(
+                        otpCode: $viewModel.otpCode,
+                        timeRemaining: $timeRemaining
+                    )
                     
-                    DepartmentSection(selectedDepartment: $selectedDepartment)
+                    DepartmentSection(selectedDepartmentId: $viewModel.selectedDepartmentId)
                     
-                    PasswordSection(password: $password, showPassword: $showPassword)
+                    PasswordSection(
+                        password: $viewModel.password,
+                        showPassword: $showPassword
+                    )
                     
-                    ConfirmPasswordSection(confirmPassword: $confirmPassword, showConfirmPassword: $showConfirmPassword)
+                    ConfirmPasswordSection(
+                        confirmPassword: $viewModel.confirmPassword,
+                        showConfirmPassword: $showConfirmPassword
+                    )
                     
                     HStack(alignment: .top, spacing: 12) {
-                        Button(action: { agreedToTerms.toggle() }) {
-                            Image(systemName: agreedToTerms ? "checkmark.square.fill" : "square")
+                        Button(action: { viewModel.agreedToTerms.toggle() }) {
+                            Image(systemName: viewModel.agreedToTerms ? "checkmark.square.fill" : "square")
                                 .font(.system(size: 20))
-                                .foregroundColor(agreedToTerms ? .appViolet : .gray)
+                                .foregroundColor(viewModel.agreedToTerms ? .appViolet : .gray)
                         }
                         
                         Text("I agree to the Terms of Service and Privacy Policy")
@@ -72,26 +71,40 @@ struct RegistrationView: View {
                     .padding(.top, 8)
                     
                     Button(action: {
-                        appCoordinator.login()
+                        Task {
+                            await viewModel.register()
+                            if TokenManager.shared.isLoggedIn() {
+                                appCoordinator.login()
+                            }
+                        }
                     }) {
-                        Text("Create Account")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(Color.appViolet)
-                            .cornerRadius(8)
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .tint(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                        } else {
+                            Text("Create Account")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                        }
                     }
+                    .background(Color.appViolet)
+                    .cornerRadius(8)
+                    .disabled(viewModel.isLoading)
                     .padding(.top, 8)
                     
                     HStack(spacing: 4) {
                         Text("Already have an account?")
                             .font(.system(size: 14))
                             .foregroundColor(.gray)
-                        Button("Sign In") {coordinator.pop()
+                        Button("Sign In") {
+                            coordinator.pop()
                         }
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.appViolet)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.appViolet)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.top, 8)
@@ -105,9 +118,10 @@ struct RegistrationView: View {
                 timeRemaining -= 1
             }
         }
+        .alert("Error", isPresented: $viewModel.showError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.errorMessage ?? "An error occurred")
+        }
     }
-}
-
-#Preview {
-    RegistrationView()
 }

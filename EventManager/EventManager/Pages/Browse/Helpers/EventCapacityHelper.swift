@@ -1,10 +1,3 @@
-//
-//  EventCapacityHelper.swift
-//  EventManager
-//
-//  Created by Atinati on 21.12.25.
-//
-
 import Foundation
 
 struct EventCapacityHelper {

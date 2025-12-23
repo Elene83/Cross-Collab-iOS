@@ -1,15 +1,8 @@
-//
-//  ForgotPasswordView.swift
-//  EventManager
-//
-//  Created by Atinati on 20.12.25.
-//
-
 import SwiftUI
 
 struct ForgotPasswordView: View {
     @EnvironmentObject var coordinator: AuthCoordinator
-    @State private var email = ""
+    @State private var viewModel = ForgotPasswordViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -18,23 +11,35 @@ struct ForgotPasswordView: View {
             VStack(spacing: 24) {
                 ForgotPasswordHeaderView()
                 
-                ForgotPasswordEmailField(email: $email)
+                ForgotPasswordEmailField(email: $viewModel.email)
                     .padding(.top, 24)
                 
-                Button(action: {}) {
-                    Text("Send Reset Link")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 56)
-                        .background(Color.appViolet)
-                        .cornerRadius(12)
+                Button(action: {
+                    Task {
+                        await viewModel.sendResetLink()
+                    }
+                }) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .tint(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                    } else {
+                        Text("Send Reset Link")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                    }
                 }
+                .background(Color.appViolet)
+                .cornerRadius(12)
+                .disabled(viewModel.isLoading)
                 .padding(.horizontal, 32)
                 .padding(.top, 8)
                 
                 BackToSignInButton(onBack: {
-                    coordinator.pop()  
+                    coordinator.pop()
                 })
                 .padding(.top, 16)
             }
@@ -48,6 +53,18 @@ struct ForgotPasswordView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6))
+        .alert("Success", isPresented: $viewModel.showSuccess) {
+            Button("OK") {
+                coordinator.pop()
+            }
+        } message: {
+            Text("Password reset link has been sent to your email")
+        }
+        .alert("Error", isPresented: $viewModel.showError) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.errorMessage ?? "An error occurred")
+        }
     }
 }
 

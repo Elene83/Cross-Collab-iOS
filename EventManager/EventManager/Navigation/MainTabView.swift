@@ -23,6 +23,11 @@ struct MainTabView: View {
                     Label("Updates", image: "UpdatesIcon")
                 }
                 .tag(3)
+            ProfileView()
+                .tabItem {
+                    Label("Profile", image: "ProfileIcon")
+                        .tag(4)
+                }
         }
     }
 }
