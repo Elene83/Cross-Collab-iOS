@@ -14,7 +14,7 @@ struct SignInEmailField: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Email")
                 .font(.system(size: 14))
-                .foregroundColor(.primary)
+                .foregroundColor(.appDarkGray)
             TextField("Enter your email", text: $email)
                 .textFieldStyle(CustomTextFieldStyle())
                 .keyboardType(.emailAddress)

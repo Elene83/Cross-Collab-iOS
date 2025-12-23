@@ -14,5 +14,6 @@ struct LocationSection: View {
         Section("Location") {
             TextField("Enter location", text: $selectedLocation)
         }
+        .foregroundStyle(Color.appGray)
     }
 }

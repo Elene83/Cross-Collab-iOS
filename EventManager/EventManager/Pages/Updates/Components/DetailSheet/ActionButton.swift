@@ -17,16 +17,16 @@ struct ActionButton: View {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 18))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.appViolet)
                 
                 Text(title)
                     .font(.subheadline)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.appDarkGray)
                 
                 Spacer()
             }
             .padding(16)
-            .background(Color(.systemGray6))
+            .background(Color(.appBlue).opacity(0.10))
             .cornerRadius(12)
         }
     }

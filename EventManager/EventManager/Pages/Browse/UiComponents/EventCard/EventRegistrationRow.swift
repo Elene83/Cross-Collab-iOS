@@ -19,17 +19,21 @@ struct EventRegistrationRow: View {
             HStack(spacing: 4) {
                 Image(systemName: "person.2")
                     .font(.caption)
+                    .foregroundStyle(Color.appViolet)
                 Text("\(event.confirmedCount) registered")
                     .font(.caption)
+                    .foregroundStyle(Color.appDarkGray)
             }
             
             HStack(spacing: 4) {
                 Image(systemName: event.isFull ? "person.fill.xmark" : "person.fill.checkmark")
                     .font(.caption)
+                    .foregroundStyle(Color.appViolet)
                 Text(event.isFull ? "0 spots left" : "\(spotsLeft) spots left")
                     .font(.caption)
+                    .foregroundStyle(Color.appDarkGray)
             }
         }
-        .foregroundColor(.secondary)
+        .foregroundColor(.appDarkGray)
     }
 }

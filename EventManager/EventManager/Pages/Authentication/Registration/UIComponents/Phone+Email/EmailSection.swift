@@ -14,7 +14,7 @@ struct EmailSection: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Email")
                 .font(.system(size: 14))
-                .foregroundColor(.primary)
+                .foregroundColor(.appDarkGray)
             TextField("john.doe@company.com", text: $email)
                 .textFieldStyle(CustomTextFieldStyle())
                 .keyboardType(.emailAddress)

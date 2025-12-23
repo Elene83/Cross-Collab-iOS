@@ -35,7 +35,7 @@ struct RegistrationView: View {
                         .font(.system(size: 24))
                     Text("Enter your details to get started.")
                         .font(.system(size: 14))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.appGray)
                 }
                 .padding(.top, 40)
                 .padding(.bottom, 32)
@@ -62,7 +62,7 @@ struct RegistrationView: View {
                         Button(action: { agreedToTerms.toggle() }) {
                             Image(systemName: agreedToTerms ? "checkmark.square.fill" : "square")
                                 .font(.system(size: 20))
-                                .foregroundColor(agreedToTerms ? .blue : .gray)
+                                .foregroundColor(agreedToTerms ? .appViolet : .gray)
                         }
                         
                         Text("I agree to the Terms of Service and Privacy Policy")
@@ -79,7 +79,7 @@ struct RegistrationView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 52)
-                            .background(Color.black)
+                            .background(Color.appViolet)
                             .cornerRadius(8)
                     }
                     .padding(.top, 8)
@@ -91,7 +91,7 @@ struct RegistrationView: View {
                         Button("Sign In") {coordinator.pop()
                         }
                             .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.primary)
+                            .foregroundColor(.appViolet)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.top, 8)

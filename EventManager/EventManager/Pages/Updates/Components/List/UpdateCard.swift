@@ -22,12 +22,12 @@ struct UpdateCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.subheadline)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.appDarkGray)
                         .multilineTextAlignment(.leading)
                     
                     Text(time)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.appDarkGray)
                 }
                 
                 Spacer()
@@ -37,7 +37,16 @@ struct UpdateCard: View {
                 }
             }
             .padding(16)
-            .background(isUnread ? Color(.systemGray5) : Color(.systemBackground))
+            .background(isUnread ? Color(.appBlue).opacity(0.10) : Color(.systemBackground))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color(.systemGray4), lineWidth: 1)
+            )
         }
     }
+}
+
+#Preview {
+    UpdatesView()
 }

@@ -14,12 +14,13 @@ struct FilterButton: View {
         Button(action: { showFilters.toggle() }) {
             HStack(spacing: 6) {
                 Image(systemName: "slider.horizontal.3")
+                    .foregroundStyle(Color(.appViolet))
                 Text("Filters")
             }
-            .foregroundColor(.primary)
+            .foregroundColor(.appDarkGray)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color(.systemGray6))
+            .background(Color(.white))
             .cornerRadius(12)
         }
     }

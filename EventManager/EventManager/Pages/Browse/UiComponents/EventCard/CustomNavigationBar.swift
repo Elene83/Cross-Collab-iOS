@@ -14,14 +14,10 @@ struct CustomNavigationBar: View {
                 .font(.title2)
             
             Spacer()
-            
-            Button(action: {}) {
-                Image("BrowseEventsIcon")
-            }
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
-        .background(Color(.systemBackground))
+        .background(Color(.appBlue).opacity(0.10))
     }
 }
 

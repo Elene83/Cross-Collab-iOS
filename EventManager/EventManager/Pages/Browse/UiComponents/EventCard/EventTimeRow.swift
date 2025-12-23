@@ -18,9 +18,10 @@ struct EventTimeRow: View {
         HStack(spacing: 4) {
             Image(systemName: "clock")
                 .font(.caption)
+                .foregroundStyle(Color.appViolet)
             Text(timeString)
                 .font(.caption)
         }
-        .foregroundColor(.secondary)
+        .foregroundColor(.appDarkGray)
     }
 }

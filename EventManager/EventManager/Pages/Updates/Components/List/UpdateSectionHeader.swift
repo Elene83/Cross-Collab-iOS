@@ -12,12 +12,14 @@ struct UpdateSectionHeader: View {
     
     var body: some View {
         Text(title)
-            .font(.caption)
-            .fontWeight(.semibold)
-            .foregroundColor(.secondary)
+            .font(.callout)
+            .foregroundColor(.appDarkGray)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(Color(.systemGray6))
     }
+}
+
+#Preview {
+    UpdatesView()
 }

@@ -14,11 +14,11 @@ struct EmptyEventsView: View {
             VStack(spacing: 12) {
                 Image(systemName: "calendar.badge.exclamationmark")
                     .font(.system(size: 50))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.appViolet)
                 
                 Text("No events found")
                     .font(.headline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.appRed)
             }
             Spacer()
         }

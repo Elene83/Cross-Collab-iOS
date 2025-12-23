@@ -15,7 +15,7 @@ struct EventHeaderRow: View {
         HStack {
             Text(eventTypeName)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(.appDarkGray)
             
             Spacer()
             

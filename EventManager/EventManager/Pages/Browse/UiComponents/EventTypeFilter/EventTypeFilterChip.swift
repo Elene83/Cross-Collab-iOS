@@ -30,10 +30,10 @@ struct EventTypeFilterChip: View {
             Text(title)
                 .font(.subheadline)
                 .fontWeight(isSelected ? .semibold : .regular)
-                .foregroundColor(isSelected ? .white : .primary)
+                .foregroundColor(isSelected ? .white : .appDarkGray)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
-                .background(isSelected ? Color.black : Color(.systemGray6))
+                .background(isSelected ? Color.appViolet: Color(.white))
                 .cornerRadius(20)
         }
         .simultaneousGesture(

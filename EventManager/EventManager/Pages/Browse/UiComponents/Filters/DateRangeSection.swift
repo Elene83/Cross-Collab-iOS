@@ -18,6 +18,7 @@ struct DateRangeSection: View {
                 }
             }
             .pickerStyle(.menu)
+            .foregroundStyle(Color.appGray)
         }
     }
 }

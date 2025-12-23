@@ -16,18 +16,19 @@ struct PasswordSection: View {
             HStack {
                 Text("Password")
                     .font(.system(size: 14))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.appDarkGray)
                 Spacer()
                 Button(action: { showPassword.toggle() }) {
                     Image(systemName: showPassword ? "eye.slash" : "eye")
                         .font(.system(size: 14))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.appViolet)
                 }
             }
             
             if showPassword {
                 TextField("Create password", text: $password)
                     .textFieldStyle(CustomTextFieldStyle())
+                
             } else {
                 SecureField("Create password", text: $password)
                     .textFieldStyle(CustomTextFieldStyle())
@@ -38,4 +39,8 @@ struct PasswordSection: View {
                 .foregroundColor(.gray)
         }
     }
+}
+
+#Preview {
+    SignInView()
 }

@@ -13,7 +13,7 @@ struct EventTitleText: View {
     var body: some View {
         Text(title)
             .font(.headline)
-            .foregroundColor(.primary)
+            .foregroundColor(.appDarkGray)
             .lineLimit(2)
     }
 }

@@ -16,7 +16,7 @@ struct OTPTextField: View {
             .frame(width: 48, height: 56)
             .multilineTextAlignment(.center)
             .font(.system(size: 20, weight: .medium))
-            .background(Color(.systemGray6))
+            .background(Color(.appBlue).opacity(0.10))
             .cornerRadius(8)
             .keyboardType(.numberPad)
             .onChange(of: text) { oldValue, newValue in
@@ -28,4 +28,7 @@ struct OTPTextField: View {
                 }
             }
     }
+}
+#Preview {
+    RegistrationView()
 }
