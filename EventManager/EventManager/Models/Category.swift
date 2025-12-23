@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct Category: Identifiable, Decodable {
+struct Category: Identifiable, Decodable, Hashable {
     var id: Int
     var title: String
     var eventCount: [Event]

@@ -39,7 +39,7 @@ struct FilteredCategoryView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {}) {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
+                        Image(systemName: "slider.horizontal.3")
                     }
                 }
             }
