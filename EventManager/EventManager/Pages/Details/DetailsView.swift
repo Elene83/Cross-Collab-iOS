@@ -20,6 +20,14 @@ struct DetailsView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
                 
+                /*TODO: aq daamate ro daacher tu adgilebi dakavebulia sheicvalos - if full get waitlisted, tu aris adgilebi mashin registered da ro daachers daregistrirebuls  daacancelebs
+                Action Button States
+                • Register Now
+                • Registered
+                • Join Waitlist
+                • Cancel Registration
+                Button state must reflect backend response at all times .*/
+                
                 DetailsHeader(
                     imageUrl: event.imageUrl,
                     eventTypeId: event.eventTypeId,

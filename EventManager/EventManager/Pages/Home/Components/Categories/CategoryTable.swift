@@ -23,7 +23,9 @@ struct CategoryTable: View {
             } else {
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(categories.prefix(6)) { category in
-                        CategoryCard(category: category)
+                        NavigationLink(value: category) {
+                            CategoryCard(category: category)
+                        }
                     }
                 }
             }

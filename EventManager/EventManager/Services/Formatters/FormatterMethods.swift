@@ -3,7 +3,7 @@ import SwiftUI
 class Formatters {
     static let shared = Formatters()
     
-    private init() {} 
+    private init() {}
     
     func monthAbbreviation(for event: Event) -> String {
         let formatter = DateFormatter()
@@ -34,6 +34,12 @@ class Formatters {
     func formatStartDateMonth(for event: Event) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d, yyyy"
+        return formatter.string(from: event.startDateTime)
+    }
+    
+    func formattedDateCard(for event: Event) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E, MMM d, yyyy"
         return formatter.string(from: event.startDateTime)
     }
 }

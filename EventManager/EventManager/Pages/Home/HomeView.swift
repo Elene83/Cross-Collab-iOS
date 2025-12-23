@@ -18,6 +18,9 @@ struct HomeView: View {
             .navigationDestination(for: Event.self) { event in
                 DetailsView(event: event)
             }
+            .navigationDestination(for: Category.self) { category in
+                BrowseCategoryView(category: category)
+            }
         }
     }
 }
