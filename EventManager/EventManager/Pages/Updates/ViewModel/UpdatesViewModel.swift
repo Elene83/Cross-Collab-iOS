@@ -8,11 +8,12 @@
 import Foundation
 import SwiftUI
 
-class UpdatesViewModel: ObservableObject {
-    @Published var notifications: [UpdateNotification] = []
-    @Published var selectedFilter: FilterType = .all
-    @Published var isLoading = false
-    @Published var readNotificationIds: Set<Int> = []
+@Observable
+class UpdatesViewModel {
+    var notifications: [UpdateNotification] = []
+    var selectedFilter: FilterType = .all
+    var isLoading = false
+    var readNotificationIds: Set<Int> = []
     
     var unreadCount: Int {
         notifications.filter { !readNotificationIds.contains($0.id) }.count

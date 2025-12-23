@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FilteredCategoryView: View {
     let eventType: EventTypeDto
-    @StateObject private var viewModel = FilteredCategoryViewModel()
+    @State private var viewModel = FilteredCategoryViewModel()
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {

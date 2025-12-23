@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EventFiltersView: View {
     @Binding var isPresented: Bool
-    @ObservedObject var viewModel: BrowseEventsViewModel
+    @Bindable var viewModel: BrowseEventsViewModel
     let onApply: (EventFilterParameters) -> Void
     
     var body: some View {

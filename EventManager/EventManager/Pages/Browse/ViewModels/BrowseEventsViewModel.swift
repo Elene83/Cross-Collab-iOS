@@ -9,34 +9,30 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class BrowseEventsViewModel: ObservableObject, ErrorHandling {
+@Observable
+class BrowseEventsViewModel: ErrorHandling {
     // MARK: Events Properties
-    @Published var events: [EventListDto] = []
-    @Published var eventTypes: [EventTypeDto] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String?
+    var events: [EventListDto] = []
+    var eventTypes: [EventTypeDto] = []
+    var isLoading = false
+    var errorMessage: String?
     
     // MARK: Search & Filter Properties
-    @Published var searchText = ""
-    @Published var showFilters = false
-    @Published var selectedEventType: Int?
+    var searchText = ""
+    var showFilters = false
+    var selectedEventType: Int?
     
     // MARK: Filter Properties
-    @Published var onlyAvailable = false
-    @Published var selectedLocation = ""
-    @Published var selectedDateRange: DateRange = .all
-    @Published var selectedEventTypeId: Int?
+    var onlyAvailable = false
+    var selectedLocation = ""
+    var selectedDateRange: DateRange = .all
+    var selectedEventTypeId: Int?
     
     private let apiService: APIServiceProtocol
-    private var searchTask: Task<Void, Never>?
     
     init(apiService: APIServiceProtocol = MockAPIService.shared) {
         self.apiService = apiService
     }
-    
-    deinit {
-           searchTask?.cancel()
-       }
     
     // MARK: Computed Properties
     var hasActiveFilters: Bool {
@@ -104,17 +100,15 @@ class BrowseEventsViewModel: ObservableObject, ErrorHandling {
                 eventTypeId: typeId,
                 searchKeyword: searchText.isEmpty ? nil : searchText,
                 onlyAvailable: onlyAvailable ? true : nil,
-                location: selectedLocation.isEmpty ? nil : selectedLocation  
+                location: selectedLocation.isEmpty ? nil : selectedLocation
             )
         }
     }
     
     // MARK: Search Handling
     func handleSearchChange(_ newValue: String) {
-        searchTask?.cancel()
-        searchTask = Task {
+        Task {
             try? await Task.sleep(nanoseconds: 500_000_000)
-            guard !Task.isCancelled else { return }
             await loadEvents(
                 eventTypeId: selectedEventType,
                 searchKeyword: newValue.isEmpty ? nil : newValue
