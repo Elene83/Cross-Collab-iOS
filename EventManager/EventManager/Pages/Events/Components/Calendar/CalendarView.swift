@@ -1,56 +1,41 @@
 import SwiftUI
 
 struct EventCalendarView: View {
-    let events: [Event]
-    @Binding var selectedDate: Date
-    
-    var nextUpcomingEvent: Event? {
-        events
-            .filter { $0.startDateTime > Date() }
-            .sorted { $0.startDateTime < $1.startDateTime }
-            .first
-    }
-    
-    var eventsForSelectedDate: [Event] {
-        events.filter { Calendar.current.isDate($0.startDateTime, inSameDayAs: selectedDate) }
-    }
+    @ObservedObject var viewModel: MyEventsViewModel
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // Next Upcoming Event
-                if let upcomingEvent = nextUpcomingEvent {
+                if let upcomingEvent = viewModel.nextUpcomingEvent {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Next Upcoming Event")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .padding(.horizontal)
                         
-                        UpcomingEventCard(event: upcomingEvent)
+                        UpcomingEventCard(event: upcomingEvent, viewModel: viewModel)
                             .padding(.horizontal)
                     }
                 }
                 
-                // Calendar
-                CalendarGridView(events: events, selectedDate: $selectedDate)
+                CalendarGridView(viewModel: viewModel)
                     .padding(.horizontal)
                 
-                // Events for Selected Date
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Events on \(selectedDate.formatted(date: .complete, time: .omitted))")
+                    Text("Events on \(viewModel.selectedDate.formatted(date: .complete, time: .omitted))")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .padding(.horizontal)
                     
-                    if eventsForSelectedDate.isEmpty {
+                    if viewModel.eventsForSelectedDate.isEmpty {
                         Text("No events scheduled for this day")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 32)
                     } else {
-                        ForEach(eventsForSelectedDate) { event in
-                            CompactEventCard(event: event)
+                        ForEach(viewModel.eventsForSelectedDate) { event in
+                            CompactEventCard(event: event, viewModel: viewModel)
                         }
                         .padding(.horizontal)
                     }

@@ -3,6 +3,7 @@ import MapKit
 
 struct UpcomingEventCard: View {
     let event: Event
+    @ObservedObject var viewModel: MyEventsViewModel
     
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
@@ -20,7 +21,7 @@ struct UpcomingEventCard: View {
                 Image(systemName: "clock")
                     .foregroundColor(.gray)
                     .frame(width: 16)
-                Text("\(event.startDateTime.formatted(date: .abbreviated, time: .omitted)), \(event.startDateTime.formatted(date: .omitted, time: .shortened)) - \(event.endDateTime.formatted(date: .omitted, time: .shortened))")
+                Text(viewModel.formatEventDateTime(event.startDateTime, event.endDateTime))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -34,7 +35,6 @@ struct UpcomingEventCard: View {
                     .foregroundColor(.secondary)
             }
             
-            // Map using UIViewRepresentable
             MapViewRepresentable(region: $region, coordinate: coordinate)
                 .frame(height: 120)
                 .cornerRadius(8)
@@ -56,22 +56,14 @@ struct UpcomingEventCard: View {
     }
     
     private func geocodeLocation() {
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(event.location) { placemarks, error in
-            if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
-                return
-            }
+        viewModel.geocodeLocation(for: event.location) { coordinate in
+            guard let coordinate = coordinate else { return }
             
-            if let placemark = placemarks?.first,
-               let location = placemark.location {
-                let newCoordinate = location.coordinate
-                coordinate = newCoordinate
-                region = MKCoordinateRegion(
-                    center: newCoordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                )
-            }
+            self.coordinate = coordinate
+            self.region = MKCoordinateRegion(
+                center: coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
         }
     }
 }
