@@ -14,3 +14,7 @@ struct EventListView: View {
         }
     }
 }
+
+#Preview {
+    MainTabView()
+}

@@ -50,7 +50,7 @@ struct DetailsView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Color("AppBlack"))
+                        .background(Color("AppViolet"))
                         .cornerRadius(6)
                     }
                     Text("Registration closes on \(Formatters.shared.formatStartDateMonth(for: event)) at \(event.startDateTime)")

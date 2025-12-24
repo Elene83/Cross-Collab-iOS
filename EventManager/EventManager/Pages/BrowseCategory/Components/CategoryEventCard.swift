@@ -39,7 +39,7 @@ struct CategoryEventCard: View {
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(Color("AppDarkGray"))
                             .padding(8)
-                            .background(Color("AppLightGray").opacity(0.3))
+                            .background(Color("AppBlue").opacity(0.2))
                             .clipShape(RoundedRectangle(cornerRadius: 20))
                     }
                 }
@@ -100,7 +100,7 @@ struct CategoryEventCard: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
-                    .background(Color.black)
+                    .background(Color("AppViolet"))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
             }
             .padding(16)

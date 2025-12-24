@@ -11,7 +11,7 @@ struct CategoryFilterItem: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background(filterItem.isActive ? Color("AppBlack") : Color("AppLightGray").opacity(0.4))
+        .background(filterItem.isActive ? Color("AppViolet") : Color("AppBlue").opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 40))
     }
 }
