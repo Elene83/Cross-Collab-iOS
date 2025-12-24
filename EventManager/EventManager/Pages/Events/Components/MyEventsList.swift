@@ -1,7 +1,16 @@
-//
-//  EventsViewList.swift
-//  EventManager
-//
-//  Created by Eorime on 24.12.25.
-//
+import SwiftUI
 
+struct EventListView: View {
+    let events: [Event]
+    
+    var body: some View {
+        ScrollView {
+            LazyVStack(spacing: 16) {
+                ForEach(events) { event in
+                    EventCard(event: event)
+                }
+            }
+            .padding()
+        }
+    }
+}

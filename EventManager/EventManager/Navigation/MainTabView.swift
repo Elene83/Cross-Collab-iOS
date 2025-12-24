@@ -13,7 +13,7 @@ struct MainTabView: View {
                     Label("Browse", image: "BrowseIcon")
                 }
                 .tag(1)
-            EventsView()
+            MyEventsView()
                 .tabItem {
                     Label("My Events", image: "EventsIcon")
                 }

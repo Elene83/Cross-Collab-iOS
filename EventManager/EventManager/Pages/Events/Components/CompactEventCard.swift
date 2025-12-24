@@ -1,10 +1,13 @@
+import SwiftUI
+
 struct CompactEventCard: View {
     let event: Event
+    @ObservedObject var viewModel: MyEventsViewModel
     
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(event.startDateTime.formatted(date: .omitted, time: .shortened))
+                Text(viewModel.formatEventTime(event.startDateTime))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -18,7 +21,7 @@ struct CompactEventCard: View {
                 HStack(spacing: 4) {
                     Image(systemName: "calendar")
                         .font(.caption)
-                    Text(Category.EventType(rawValue: event.eventTypeId)?.title ?? "Event")
+                    Text(viewModel.getEventTypeName(for: event.eventTypeId))
                         .font(.caption)
                 }
                 .foregroundColor(.secondary)
