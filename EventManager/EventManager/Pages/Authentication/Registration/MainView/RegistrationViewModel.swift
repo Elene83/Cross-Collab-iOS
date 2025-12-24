@@ -22,9 +22,10 @@ class RegistrationViewModel {
         
         isLoading = true
         errorMessage = nil
+        showError = false
         
         do {
-            let fullName = "\(firstName) \(lastName)"
+            let fullName = "\(firstName.trimmingCharacters(in: .whitespaces)) \(lastName.trimmingCharacters(in: .whitespaces))"
             let response = try await AuthService.shared.register(
                 email: email.trimmingCharacters(in: .whitespaces),
                 password: password,
@@ -42,45 +43,119 @@ class RegistrationViewModel {
             isLoading = false
             return true
             
+        } catch let error as AuthError {
+            isLoading = false
+            handleAuthError(error)
+            return false
         } catch {
             isLoading = false
-            errorMessage = error.localizedDescription
+            errorMessage = "An error occurred. Please try again"
             showError = true
             return false
         }
     }
     
+    private func handleAuthError(_ error: AuthError) {
+        switch error {
+        case .invalidResponse:
+            errorMessage = "Invalid server response"
+        case .serverError(let statusCode):
+            switch statusCode {
+            case 400:
+                errorMessage = "Invalid data. Please check your input"
+            case 409:
+                errorMessage = "This email is already registered"
+            case 500...599:
+                errorMessage = "Server error. Please try again later"
+            default:
+                errorMessage = "Error occurred (Code: \(statusCode))"
+            }
+        case .decodingError:
+            errorMessage = "Error processing data"
+        case .networkError:
+            errorMessage = "Network connection error"
+        }
+        showError = true
+    }
+    
     private func validateInput() -> Bool {
-        if firstName.isEmpty || lastName.isEmpty {
-            errorMessage = "Please enter your full name"
+        if firstName.trimmingCharacters(in: .whitespaces).isEmpty {
+            errorMessage = "Please enter your first name"
             showError = true
             return false
         }
-        if !isValidEmail(email) {
-            errorMessage = "Please enter a valid email"
+        
+        if firstName.trimmingCharacters(in: .whitespaces).count < 2 {
+            errorMessage = "First name must be at least 2 characters"
             showError = true
             return false
         }
-        if password.count < 6 { 
+        
+        if lastName.trimmingCharacters(in: .whitespaces).isEmpty {
+            errorMessage = "Please enter your last name"
+            showError = true
+            return false
+        }
+        
+        if lastName.trimmingCharacters(in: .whitespaces).count < 2 {
+            errorMessage = "Last name must be at least 2 characters"
+            showError = true
+            return false
+        }
+        
+        if email.trimmingCharacters(in: .whitespaces).isEmpty {
+            errorMessage = "Please enter your email"
+            showError = true
+            return false
+        }
+        
+        if !Validator.isValidEmailStrict(email) {
+            errorMessage = "Please enter a valid email address"
+            showError = true
+            return false
+        }
+        
+        if password.isEmpty {
+            errorMessage = "Please enter a password"
+            showError = true
+            return false
+        }
+        
+        if password.count < 6 {
             errorMessage = "Password must be at least 6 characters"
             showError = true
             return false
         }
+        
+        if password.count > 50 {
+            errorMessage = "Password is too long (maximum 50 characters)"
+            showError = true
+            return false
+        }
+        
+        if confirmPassword.isEmpty {
+            errorMessage = "Please confirm your password"
+            showError = true
+            return false
+        }
+        
         if password != confirmPassword {
             errorMessage = "Passwords do not match"
             showError = true
             return false
         }
+        
         if !agreedToTerms {
-            errorMessage = "Please agree to Terms of Service"
+            errorMessage = "Please agree to the Terms of Service"
             showError = true
             return false
         }
+        
         return true
     }
     
-    private func isValidEmail(_ email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        return NSPredicate(format:"SELF MATCHES %@", emailRegex).evaluate(with: email)
+    func clearError() {
+        errorMessage = nil
+        showError = false
     }
 }
