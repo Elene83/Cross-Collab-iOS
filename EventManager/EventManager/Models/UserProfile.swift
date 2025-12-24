@@ -11,7 +11,7 @@ struct UserProfile {
         id: 1,
         fullName: "Elene Dgebuadze",
         email: "Elene.Dgebuadze@.com",
-        department: "Sofwtare Development",
+        department: "Software Development",
         profileImageUrl: nil
     )
 }

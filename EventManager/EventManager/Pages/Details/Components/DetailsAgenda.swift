@@ -9,16 +9,16 @@ struct DetailsAgenda: View {
                 HStack(alignment: .top, spacing: 16) {
                     ZStack(alignment: .top) {
                         Rectangle()
-                            .fill(Color("AppGray").opacity(0.3))
+                            .fill(Color("AppBlue").opacity(0.7))
                             .frame(width: 1, height: 45)
                             .offset(y: 35)
                             .opacity(index == agenda.count - 1 ? 0 : 1)
                         
                         Text("\(index + 1)")
                             .font(.system(size: 14))
-                            .foregroundStyle(Color("AppGray"))
+                            .foregroundStyle(Color("AppBlack"))
                             .frame(width: 26, height: 26)
-                            .background(Color("AppGray").opacity(0.3))
+                            .background(Color("AppBlue").opacity(0.4))
                             .clipShape(Circle())
                     }
                     .frame(width: 26, height: 56)

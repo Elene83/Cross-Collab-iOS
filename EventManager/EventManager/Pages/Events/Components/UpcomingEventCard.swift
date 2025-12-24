@@ -48,7 +48,7 @@ struct UpcomingEventCard: View {
                 )
         }
         .padding()
-        .background(Color.blue.opacity(0.05))
+        .background(Color("AppBlue").opacity(0.1))
         .cornerRadius(12)
         .onAppear {
             geocodeLocation()
@@ -66,4 +66,8 @@ struct UpcomingEventCard: View {
             )
         }
     }
+}
+
+#Preview {
+    MainTabView()
 }

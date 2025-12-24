@@ -36,7 +36,7 @@ struct CategoryFilter: View {
                     .foregroundStyle(hasActiveFilters ? .white : Color("AppDarkGray"))
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(hasActiveFilters ? Color("AppBlack") : Color("AppLightGray").opacity(0.4))
+                    .background(hasActiveFilters ? Color("AppViolet") : Color("AppBlue").opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: 40))
                 }
                 
@@ -102,4 +102,8 @@ struct CategoryFilter: View {
                    selectedFilters.contains("spots_20+")
         }
     }
+}
+
+#Preview {
+    MainTabView()
 }

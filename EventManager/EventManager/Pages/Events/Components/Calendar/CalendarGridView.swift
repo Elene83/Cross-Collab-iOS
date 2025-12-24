@@ -11,7 +11,7 @@ struct CalendarGridView: View {
             HStack {
                 Button(action: { viewModel.changeMonth(by: -1) }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("AppViolet"))
                         .padding()
                 }
                 
@@ -24,7 +24,7 @@ struct CalendarGridView: View {
                 
                 Button(action: { viewModel.changeMonth(by: 1) }) {
                     Image(systemName: "chevron.right")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color("AppViolet"))
                         .padding()
                 }
             }
@@ -61,4 +61,8 @@ struct CalendarGridView: View {
         .background(Color.white)
         .cornerRadius(12)
     }
+}
+
+#Preview {
+    MainTabView()
 }

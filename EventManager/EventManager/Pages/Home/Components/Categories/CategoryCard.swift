@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CategoryCard: View {
     let category: Category
+    let color: String
     
     var body: some View {
         VStack(spacing: 2) {
@@ -9,6 +10,7 @@ struct CategoryCard: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
+                .foregroundStyle(Color(color)) 
             
             Text(category.title)
                 .font(.system(size: 14))
@@ -23,13 +25,12 @@ struct CategoryCard: View {
         }
         .padding(.top, 8)
         .padding(.bottom, 16)
-
         .frame(width: 106, height: 122)
         .background(Color(.systemBackground))
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
     }
 }
