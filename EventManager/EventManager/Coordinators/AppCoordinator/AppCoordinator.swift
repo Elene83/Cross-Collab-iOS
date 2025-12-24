@@ -1,23 +1,22 @@
 import SwiftUI
 
-@MainActor
 class AppCoordinator: ObservableObject {
-    @Published var isAuthenticated = false
+    @Published var isAuthenticated: Bool = false
     
     init() {
-        checkAuthStatus()
-    }
-    
-    func checkAuthStatus() {
-        isAuthenticated = TokenManager.shared.isLoggedIn()
+        self.isAuthenticated = TokenManager.shared.isLoggedIn()
     }
     
     func login() {
-        isAuthenticated = true
+        DispatchQueue.main.async {
+            self.isAuthenticated = true
+        }
     }
     
     func logout() {
         TokenManager.shared.clearToken()
-        isAuthenticated = false
+        DispatchQueue.main.async {
+            self.isAuthenticated = false
+        }
     }
 }
