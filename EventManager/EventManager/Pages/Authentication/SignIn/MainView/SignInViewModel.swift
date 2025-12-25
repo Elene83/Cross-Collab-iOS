@@ -6,10 +6,38 @@ import Observation
 class SignInViewModel {
     var email = ""
     var password = ""
+    var rememberMe = false
     var isLoading = false
     var errorMessage: String?
     var showError = false
     var isAuthenticated = false
+    var showPasswordHint = false
+    
+    init() {
+        loadRememberedEmail()
+    }
+    
+    func loadRememberedEmail() {
+        if let rememberedEmail = TokenManager.shared.getRememberedEmail() {
+            email = rememberedEmail
+            rememberMe = true
+            checkForSavedPassword()
+        }
+    }
+    
+    func checkForSavedPassword() {
+        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
+        showPasswordHint = !trimmedEmail.isEmpty &&
+                          TokenManager.shared.hasRememberedCredentials(for: trimmedEmail)
+    }
+    
+    func useSavedPassword() {
+        let trimmedEmail = email.trimmingCharacters(in: .whitespaces)
+        if let savedPassword = TokenManager.shared.getRememberedPassword(for: trimmedEmail) {
+            password = savedPassword
+            showPasswordHint = false
+        }
+    }
     
     func signIn() async {
         guard validateFields() else { return }
@@ -32,8 +60,15 @@ class SignInViewModel {
                 expiresAt: authResponse.expiresAt
             )
             
-            print("DEBUG: Login successful. Token saved for user: \(authResponse.fullName)")
-            
+            if rememberMe {
+                TokenManager.shared.saveCredentials(
+                    email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+                    password: password
+                )
+            } else {
+                TokenManager.shared.clearRememberedCredentials()
+            }
+                        
             isLoading = false
             isAuthenticated = true
             
@@ -81,9 +116,7 @@ class SignInViewModel {
             return false
         }
         
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
-        if !emailPredicate.evaluate(with: email.trimmingCharacters(in: .whitespacesAndNewlines)) {
+        if !Validator.isValidEmail(email) {
             errorMessage = "Please enter a valid email address"
             showError = true
             return false

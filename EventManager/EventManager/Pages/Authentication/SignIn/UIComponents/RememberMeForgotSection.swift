@@ -6,9 +6,11 @@ struct RememberMeForgotSection: View {
     
     var body: some View {
         HStack {
-            Button(action: { rememberMe.toggle() }) {
+            Button {
+                rememberMe.toggle()
+            } label: {
                 HStack(spacing: 8) {
-                    Image(systemName: rememberMe ? "checkmark.square" : "square")
+                    Image(systemName: rememberMe ? "checkmark.square.fill" : "square")
                         .font(.system(size: 18))
                         .foregroundColor(rememberMe ? .appViolet : .gray)
                     Text("Remember me")
@@ -16,6 +18,7 @@ struct RememberMeForgotSection: View {
                         .foregroundColor(.appDarkGray)
                 }
             }
+            .buttonStyle(PlainButtonStyle())
             
             Spacer()
             

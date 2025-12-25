@@ -8,6 +8,8 @@ class TokenManager {
     private let userNameKey = "user_name"
     private let userRoleKey = "user_role"
     private let expiresAtKey = "expires_at"
+    private let rememberedEmailKey = "remembered_email"
+    private let rememberedPasswordKey = "remembered_password"
     
     private init() {}
     
@@ -59,5 +61,32 @@ class TokenManager {
         }
         
         return Date() > expiresAt
+    }
+    
+    func saveCredentials(email: String, password: String) {
+        UserDefaults.standard.set(email, forKey: rememberedEmailKey)
+        UserDefaults.standard.set(password, forKey: rememberedPasswordKey)
+    }
+    
+    func getRememberedEmail() -> String? {
+        return UserDefaults.standard.string(forKey: rememberedEmailKey)
+    }
+    
+    func getRememberedPassword(for email: String) -> String? {
+        guard let savedEmail = UserDefaults.standard.string(forKey: rememberedEmailKey),
+              savedEmail.lowercased() == email.trimmingCharacters(in: .whitespaces).lowercased(),
+              let savedPassword = UserDefaults.standard.string(forKey: rememberedPasswordKey) else {
+            return nil
+        }
+        return savedPassword
+    }
+    
+    func clearRememberedCredentials() {
+        UserDefaults.standard.removeObject(forKey: rememberedEmailKey)
+        UserDefaults.standard.removeObject(forKey: rememberedPasswordKey)
+    }
+    
+    func hasRememberedCredentials(for email: String) -> Bool {
+        return getRememberedPassword(for: email) != nil
     }
 }
