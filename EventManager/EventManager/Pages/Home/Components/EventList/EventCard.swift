@@ -69,9 +69,7 @@ struct EventCard: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    print("aqac navigacia")
-                }) {
+                NavigationLink(value: event) {
                     HStack(spacing: 4) {
                         Text("View Details")
                             .font(.system(size: 13, weight: .medium))

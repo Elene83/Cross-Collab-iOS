@@ -3,7 +3,8 @@ import SwiftUI
 struct DetailsView: View {
     var event: Event
     @Environment(\.dismiss) private var dismiss
-
+    @State private var viewModel = ViewModel()
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -20,14 +21,6 @@ struct DetailsView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
                 
-                /*TODO: aq daamate ro daacher tu adgilebi dakavebulia sheicvalos - if full get waitlisted, tu aris adgilebi mashin registered da ro daachers daregistrirebuls  daacancelebs
-                Action Button States
-                • Register Now
-                • Registered
-                • Join Waitlist
-                • Cancel Registration
-                Button state must reflect backend response at all times .*/
-                
                 DetailsHeader(
                     imageUrl: event.imageUrl,
                     eventTypeId: event.eventTypeId,
@@ -39,26 +32,30 @@ struct DetailsView: View {
 
                 Divider()
                 
-                VStack (spacing: 8) {
-                Button(action: {
-                    print("aqac navigacia")
-                }) {
-                    HStack(spacing: 4) {
-                        Text("Register Now")
-                            .font(.system(size: 13, weight: .medium))
-                    }
+                VStack(spacing: 8) {
+                    Button(action: { viewModel.handleRegistration(for: event) }) {
+                        HStack(spacing: 8) {
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                            }
+                            Text(viewModel.buttonText(for: event))
+                                .font(.system(size: 13, weight: .medium))
+                        }
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Color("AppViolet"))
+                        .background(viewModel.buttonColor(for: event))
                         .cornerRadius(6)
                     }
+                    .disabled(viewModel.isLoading)
+                    
                     Text("Registration closes on \(Formatters.shared.formatStartDateMonth(for: event)) at \(event.startDateTime)")
                         .foregroundStyle(Color("AppGray"))
                         .font(.system(size: 12))
                 }
                 .padding(.horizontal, 16)
-
                 
                 Divider()
                 
