@@ -8,7 +8,7 @@ struct ProfileHeaderView: View {
         VStack(spacing: 16) {
             ZStack {
                 Circle()
-                    .fill(Color(.systemGray5))
+                    .fill(Color(.appViolet))
                     .frame(width: 120, height: 120)
                 
                 if let imageUrl = profileImageUrl, let url = URL(string: imageUrl) {
@@ -25,7 +25,7 @@ struct ProfileHeaderView: View {
                 } else {
                     Image(systemName: "person.fill")
                         .font(.system(size: 50))
-                        .foregroundColor(.appViolet)
+                        .foregroundColor(.white)
                 }
             }
             
