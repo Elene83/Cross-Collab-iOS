@@ -15,7 +15,7 @@ extension HomeView {
             errorMessage = nil
             
             do {
-                let response: EventsResponse = try await NetworkManager.shared.getData(from: "api/events")
+                let response: EventsResponse = try await NetworkManager.shared.getData(from: "/events")
                 self.events = response.items
                             
                 generateCategories()
