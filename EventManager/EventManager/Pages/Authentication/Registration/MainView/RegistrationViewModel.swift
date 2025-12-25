@@ -29,7 +29,9 @@ class RegistrationViewModel {
             let response = try await AuthService.shared.register(
                 email: email.trimmingCharacters(in: .whitespaces),
                 password: password,
-                fullName: fullName
+                fullName: fullName,
+                phoneNumber: phoneNumber.trimmingCharacters(in: .whitespaces),
+                departmentId: selectedDepartmentId
             )
             
             TokenManager.shared.saveToken(
@@ -147,6 +149,24 @@ class RegistrationViewModel {
         
         if !agreedToTerms {
             errorMessage = "Please agree to the Terms of Service"
+            showError = true
+            return false
+        }
+        
+        if phoneNumber.trimmingCharacters(in: .whitespaces).isEmpty {
+            errorMessage = "Please enter your phone number"
+            showError = true
+            return false
+        }
+        
+        if phoneNumber.trimmingCharacters(in: .whitespaces).count < 9 {
+            errorMessage = "Please enter a valid phone number"
+            showError = true
+            return false
+        }
+        
+        if selectedDepartmentId == 0 {
+            errorMessage = "Please select a department"
             showError = true
             return false
         }
