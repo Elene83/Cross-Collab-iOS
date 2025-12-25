@@ -25,7 +25,7 @@ struct ForgotPasswordView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
                     } else {
-                        Text("Send Reset Link")
+                        Text("Sent reset link")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
@@ -53,21 +53,19 @@ struct ForgotPasswordView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGray6))
-        .alert("Success", isPresented: $viewModel.showSuccess) {
+        .alert("Success", isPresented: $viewModel.showSuccess) { 
             Button("OK") {
                 coordinator.pop()
             }
         } message: {
-            Text("Password reset link has been sent to your email")
+            Text("Password reset instructions have been sent to \(viewModel.email)")
         }
         .alert("Error", isPresented: $viewModel.showError) {
-            Button("OK", role: .cancel) { }
+            Button("OK", role: .cancel) {
+                viewModel.clearError()
+            }
         } message: {
             Text(viewModel.errorMessage ?? "An error occurred")
         }
     }
-}
-
-#Preview {
-    ForgotPasswordView()
 }
