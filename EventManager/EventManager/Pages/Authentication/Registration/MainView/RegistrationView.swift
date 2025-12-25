@@ -72,9 +72,9 @@ struct RegistrationView: View {
                     
                     Button(action: {
                         Task {
-                            await viewModel.register()
-                            if TokenManager.shared.isLoggedIn() {
-                                appCoordinator.login()
+                            let success = await viewModel.register()
+                                    if success {
+                                        coordinator.pop()
                             }
                         }
                     }) {

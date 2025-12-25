@@ -29,8 +29,14 @@ struct SignInView: View {
                     Button(action: {
                         Task {
                             await viewModel.signIn()
-                            if TokenManager.shared.isLoggedIn() {
-                                appCoordinator.login()
+                            let token = TokenManager.shared.getToken()
+                            print("DEBUG: Checking token before navigation: \(token ?? "NULL")")
+                            
+                            if token != nil {
+                                print("DEBUG: Token exists, calling appCoordinator.login()")
+                                appCoordinator.login() 
+                            } else {
+                                print("DEBUG: Navigation failed - No token found")
                             }
                         }
                     }) {

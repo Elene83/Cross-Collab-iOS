@@ -9,44 +9,68 @@ class SignInViewModel {
     var isLoading = false
     var errorMessage: String?
     var showError = false
+    var isAuthenticated = false
     
     func signIn() async {
-        guard validateInput() else { return }
+        guard validateFields() else { return }
         
         isLoading = true
         errorMessage = nil
+        showError = false
         
         do {
-            let response = try await AuthService.shared.login(
-                email: email.trimmingCharacters(in: .whitespaces),
+            let authResponse = try await AuthService.shared.login(
+                email: email.trimmingCharacters(in: .whitespacesAndNewlines),
                 password: password
             )
             
             TokenManager.shared.saveToken(
-                response.token,
-                userId: response.userId,
-                userName: response.fullName,
-                role: response.role
+                authResponse.token,
+                userId: authResponse.userId,
+                userName: authResponse.fullName,
+                role: authResponse.role,
+                expiresAt: authResponse.expiresAt
             )
             
-            isLoading = false
+            print("DEBUG: Login successful. Token saved for user: \(authResponse.fullName)")
             
+            isLoading = false
+            isAuthenticated = true
+            
+        } catch let error as AuthError {
+            isLoading = false
+            handleAuthError(error)
         } catch {
             isLoading = false
-            errorMessage = error.localizedDescription
+            errorMessage = "An error occurred. Please try again"
             showError = true
         }
     }
     
-    private func validateInput() -> Bool {
-        if email.isEmpty {
-            errorMessage = "Please enter your email"
-            showError = true
-            return false
+    private func handleAuthError(_ error: AuthError) {
+        switch error {
+        case .invalidResponse:
+            errorMessage = "Invalid server response"
+        case .serverError(let statusCode):
+            switch statusCode {
+            case 400, 401, 404:
+                errorMessage = "Invalid email or password"
+            case 500...599:
+                errorMessage = "Server error. Please try again later"
+            default:
+                errorMessage = "Error occurred (Code: \(statusCode))"
+            }
+        case .decodingError:
+            errorMessage = "Error processing data"
+        case .networkError:
+            errorMessage = "Network connection error"
         }
-        
-        if !isValidEmail(email) {
-            errorMessage = "Please enter a valid email"
+        showError = true
+    }
+    
+    private func validateFields() -> Bool {
+        if email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            errorMessage = "Please enter your email"
             showError = true
             return false
         }
@@ -57,12 +81,19 @@ class SignInViewModel {
             return false
         }
         
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
+        if !emailPredicate.evaluate(with: email.trimmingCharacters(in: .whitespacesAndNewlines)) {
+            errorMessage = "Please enter a valid email address"
+            showError = true
+            return false
+        }
+        
         return true
     }
     
-    private func isValidEmail(_ email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
+    func clearError() {
+        errorMessage = nil
+        showError = false
     }
 }

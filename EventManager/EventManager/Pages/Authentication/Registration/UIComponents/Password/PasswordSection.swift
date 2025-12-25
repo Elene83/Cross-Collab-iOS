@@ -27,7 +27,7 @@ struct PasswordSection: View {
                     .textFieldStyle(CustomTextFieldStyle())
             }
             
-            Text("Password must be at least 8 characters with uppercase, lowercase, and number.")
+            Text("Password must be at least 6 characters with uppercase, lowercase, and number.")
                 .font(.system(size: 12))
                 .foregroundColor(.gray)
         }

@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct ProfileView: View {
     @EnvironmentObject var appCoordinator: AppCoordinator
@@ -10,12 +11,12 @@ struct ProfileView: View {
                 if let profile = viewModel.userProfile {
                     ProfileHeaderView(
                         fullName: profile.fullName,
-                        profileImageUrl: profile.profileImageUrl
+                        profileImageUrl: nil
                     )
                     
                     AccountInfoSection(
                         email: profile.email,
-                        department: profile.department
+                        department: profile.role
                     )
                     
                     LogOutButton {
@@ -35,3 +36,6 @@ struct ProfileView: View {
     }
 }
 
+#Preview {
+    ProfileView()
+}
