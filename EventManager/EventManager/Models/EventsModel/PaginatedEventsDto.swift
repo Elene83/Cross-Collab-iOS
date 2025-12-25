@@ -75,15 +75,18 @@ struct EventTypeDto: Codable, Identifiable, Hashable {
 
 struct EventListDto: Codable, Identifiable {
     let id: Int
-    let title: String
-    let eventTypeName: String
-    let startDateTime: String
-    let location: String
+    let title: String?
+    let description: String? // დაამატე ეს
+    let eventTypeId: Int
+    let eventTypeName: String?
+    let startDateTime: String // Swagger-ში მოდის ISO8601 ფორმატით
+    let location: String?
     let capacity: Int
+    let isActive: Bool // დაამატე ეს
     let confirmedCount: Int
     let isFull: Bool
     let imageUrl: String?
-    let tags: [String]
+    let tags: [String]?
 }
 
 struct EventDetailsDto: Codable, Identifiable {

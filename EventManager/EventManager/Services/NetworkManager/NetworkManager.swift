@@ -2,11 +2,11 @@ import Foundation
 
 final class NetworkManager {
     static let shared = NetworkManager()
-    private let baseURL = "http://35.205.108.13:5001/"
     
+    private let baseURL = "https://api.in-vent.online/api"
+
     private let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
-        
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -15,34 +15,28 @@ final class NetworkManager {
             let container = try decoder.singleValueContainer()
             let dateString = try container.decode(String.self)
             
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            if let date = dateFormatter.date(from: dateString) {
-                return date
-            }
+            let formats = [
+                "yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+                "yyyy-MM-dd'T'HH:mm:ssZ",
+                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "yyyy-MM-dd'T'HH:mm:ss'Z'"
+            ]
             
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            if let date = dateFormatter.date(from: dateString) {
-                return date
+            for format in formats {
+                dateFormatter.dateFormat = format
+                if let date = dateFormatter.date(from: dateString) {
+                    return date
+                }
             }
-            
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-            if let date = dateFormatter.date(from: dateString) {
-                return date
-            }
-            
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-            if let date = dateFormatter.date(from: dateString) {
-                return date
-            }
-            
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode date string: \(dateString)")
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode date: \(dateString)")
         }
-        
         return decoder
     }()
     
     func getData<T: Decodable>(from endpoint: String, queryParams: [String: String?]? = nil) async throws -> T {
-        var components = URLComponents(string: baseURL + endpoint)
+        guard let url = URL(string: baseURL + endpoint) else { throw URLError(.badURL) }
+        
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
         
         if let queryParams = queryParams {
             components?.queryItems = queryParams.compactMap { key, value in
@@ -51,12 +45,15 @@ final class NetworkManager {
             }
         }
         
-        guard let url = components?.url else { throw URLError(.badURL) }
+        guard let finalURL = components?.url else { throw URLError(.badURL) }
+        let (data, response) = try await URLSession.shared.data(from: finalURL)
         
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-            throw URLError(.badServerResponse)
+        if let httpResponse = response as? HTTPURLResponse {
+            if !(200...299).contains(httpResponse.statusCode) {
+                if String(data: data, encoding: .utf8) != nil {
+                }
+                throw URLError(.badServerResponse)
+            }
         }
         
         return try decoder.decode(T.self, from: data)

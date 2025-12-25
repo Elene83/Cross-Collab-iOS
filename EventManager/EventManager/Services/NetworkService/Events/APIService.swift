@@ -17,20 +17,25 @@ class APIService: APIServiceProtocol {
         onlyAvailable: Bool? = nil
     ) async throws -> [EventListDto] {
         
-        var queryParams: [String: String?] = [:]
+        var queryParams: [String: String?] = [
+            "EventTypeId": eventTypeId.map { String($0) },
+            "Location": location,
+            "SearchKeyword": searchKeyword,
+            "UpcomingOnly": upcomingOnly.map { String($0) },
+            "ActiveOnly": activeOnly.map { String($0) },
+            "OnlyAvailable": onlyAvailable.map { String($0) }
+        ]
+        
         let formatter = ISO8601DateFormatter()
-        
-        if let eventTypeId = eventTypeId { queryParams["EventTypeId"] = "\(eventTypeId)" }
-        if let location = location, !location.isEmpty { queryParams["Location"] = location }
-        if let searchKeyword = searchKeyword, !searchKeyword.isEmpty { queryParams["SearchKeyword"] = searchKeyword }
-        
         if let startDate = startDate { queryParams["StartDate"] = formatter.string(from: startDate) }
         if let endDate = endDate { queryParams["EndDate"] = formatter.string(from: endDate) }
-        
-        if let onlyAvailable = onlyAvailable { queryParams["OnlyAvailable"] = "\(onlyAvailable)" }
-        
-        let response: EventListDtoPagedResult = try await network.getData(from: "api/Events", queryParams: queryParams)
-        return response.items ?? []
+
+        do {
+            let response: EventListDtoPagedResult = try await network.getData(from: "/Events", queryParams: queryParams)
+            return response.items ?? []
+        } catch {
+            throw error
+        }
     }
     
     func getEventTypes() async throws -> [EventTypeDto] {
@@ -38,10 +43,10 @@ class APIService: APIServiceProtocol {
     }
     
     func getEventDetails(id: Int) async throws -> EventDetailsDto {
-        return try await network.getData(from: "api/Events/\(id)")
+        return try await network.getData(from: "/Events/\(id)")
     }
     
     func getCurrentUser() async throws -> UserDto {
-        return try await network.getData(from: "api/Auth/me")
+        return try await network.getData(from: "/Auth/me")
     }
 }
