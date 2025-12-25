@@ -45,7 +45,8 @@ class BrowseEventsViewModel: ErrorHandling {
             let fetchedEvents = try await apiService.getEvents()
             self.events = fetchedEvents
             
-            let uniqueTypeNames = Array(Set(fetchedEvents.map { $0.eventTypeName }))
+            let uniqueTypeNames = Array(Set(fetchedEvents.compactMap { $0.eventTypeName }))
+            
             self.eventTypes = uniqueTypeNames.enumerated().map { index, name in
                 EventTypeDto(id: index + 1, name: name, description: nil)
             }
@@ -53,7 +54,6 @@ class BrowseEventsViewModel: ErrorHandling {
             handleError(error)
         }
     }
-    
     func refreshEvents() async {
         let dates = calculateDates(for: selectedDateRange)
         

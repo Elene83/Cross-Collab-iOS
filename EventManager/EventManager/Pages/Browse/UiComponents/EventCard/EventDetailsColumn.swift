@@ -6,13 +6,13 @@ struct EventDetailsColumn: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             EventHeaderRow(
-                eventTypeName: event.eventTypeName,
+                eventTypeName: event.eventTypeName ?? "Unknown Type",
                 statusBadge: EventStatusHelper.getStatusBadge(for: event)
             )
             
-            EventTitleText(title: event.title)
+            EventTitleText(title: event.title ?? "")
             EventTimeRow(dateString: event.startDateTime)
-            EventLocationRow(location: event.location)
+            EventLocationRow(location: event.location ?? "No Location")
             EventRegistrationRow(event: event)
         }
     }

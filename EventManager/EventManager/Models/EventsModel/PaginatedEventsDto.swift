@@ -67,23 +67,26 @@ struct EventTypeDto: Codable, Identifiable, Hashable {
     let description: String?
 
     enum CodingKeys: String, CodingKey {
-        case id = "Id"          // სერვერიდან მოდის დიდი I-თ
-        case name = "Name"      // სერვერიდან მოდის დიდი N-თ
+        case id = "Id"
+        case name = "Name"
         case description = "Description"
     }
 }
 
 struct EventListDto: Codable, Identifiable {
     let id: Int
-    let title: String
-    let eventTypeName: String
+    let title: String?
+    let description: String?
+    let eventTypeId: Int
+    let eventTypeName: String?
     let startDateTime: String
-    let location: String
+    let location: String?
     let capacity: Int
+    let isActive: Bool 
     let confirmedCount: Int
     let isFull: Bool
     let imageUrl: String?
-    let tags: [String]
+    let tags: [String]?
 }
 
 struct EventDetailsDto: Codable, Identifiable {
