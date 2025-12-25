@@ -3,10 +3,6 @@ import SwiftUI
 extension DetailsView {
     @Observable
     class ViewModel {
-        var events = DummyEvents.sampleEvents
-        var categories: [Category] = DummyCategories.sampleCategories
-        var faqs: [FAQ] = DummyFAQs.sampleFAQs
-        
         var registeredEventIds: Set<Int> = []
         var waitlistedEventIds: Set<Int> = []
         var isLoading: Bool = false
@@ -44,7 +40,7 @@ extension DetailsView {
         func handleRegistration(for event: Event) {
             isLoading = true
             
-            //async simulation
+            // Async simulation
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                 guard let self = self else { return }
                 
@@ -67,4 +63,3 @@ extension DetailsView {
         }
     }
 }
-
