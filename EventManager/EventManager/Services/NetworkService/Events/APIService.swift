@@ -24,7 +24,6 @@ class APIService: APIServiceProtocol {
         if let location = location, !location.isEmpty { queryParams["Location"] = location }
         if let searchKeyword = searchKeyword, !searchKeyword.isEmpty { queryParams["SearchKeyword"] = searchKeyword }
         
-        // თარიღების ფორმატირება სერვერისთვის
         if let startDate = startDate { queryParams["StartDate"] = formatter.string(from: startDate) }
         if let endDate = endDate { queryParams["EndDate"] = formatter.string(from: endDate) }
         
@@ -35,7 +34,6 @@ class APIService: APIServiceProtocol {
     }
     
     func getEventTypes() async throws -> [EventTypeDto] {
-        // რადგან 404-ს აბრუნებს, დავაბრუნოთ ცარიელი, რომ ივენთებიდან შეივსოს
         return []
     }
     
