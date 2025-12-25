@@ -67,8 +67,8 @@ struct EventTypeDto: Codable, Identifiable, Hashable {
     let description: String?
 
     enum CodingKeys: String, CodingKey {
-        case id = "Id"          // სერვერიდან მოდის დიდი I-თ
-        case name = "Name"      // სერვერიდან მოდის დიდი N-თ
+        case id = "Id"
+        case name = "Name"
         case description = "Description"
     }
 }
@@ -76,13 +76,13 @@ struct EventTypeDto: Codable, Identifiable, Hashable {
 struct EventListDto: Codable, Identifiable {
     let id: Int
     let title: String?
-    let description: String? // დაამატე ეს
+    let description: String?
     let eventTypeId: Int
     let eventTypeName: String?
-    let startDateTime: String // Swagger-ში მოდის ISO8601 ფორმატით
+    let startDateTime: String
     let location: String?
     let capacity: Int
-    let isActive: Bool // დაამატე ეს
+    let isActive: Bool 
     let confirmedCount: Int
     let isFull: Bool
     let imageUrl: String?
