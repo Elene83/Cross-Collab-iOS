@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct UpdateDetailSheet: View {
+    @EnvironmentObject var appCoordinator: AppCoordinator
     let event: UpdateEventDetail
     @Binding var isPresented: Bool
     
@@ -10,12 +11,19 @@ struct UpdateDetailSheet: View {
             
             EventDetailHeader(event: event)
             
-            EventActionButtons()
-            
+            EventActionButtons(onFAQTapped: {
+                isPresented = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    appCoordinator.selectedTab = 0
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        NotificationCenter.default.post(
+                            name: NSNotification.Name("ScrollToFAQ"),
+                            object: nil
+                        )
+                    }
+                }
+            })
             Spacer()
-            
-            CancelRegistrationButton()
-            
             Button(action: {
                 isPresented = false
             }) {
