@@ -15,27 +15,47 @@ extension HomeView {
             errorMessage = nil
             
             do {
-                let response: EventsResponse = try await NetworkManager.shared.getData(from: "/events")
-                self.events = response.items
+                var allEvents: [Event] = []
+                var currentPage = 1
+                var hasMore = true
+                
+                while hasMore {
+                    let response: EventsResponse = try await NetworkManager.shared.getData(
+                        from: "/Events",
+                        queryParams: [
+                            "pageSize": "100",
+                            "pageNumber": String(currentPage)
+                        ]
+                    )
+                                        
+                    allEvents.append(contentsOf: response.items)
+                    hasMore = response.hasNext
+                    currentPage += 1
+                }
+                
+                self.events = allEvents
                             
                 generateCategories()
             } catch {
                 self.errorMessage = "Failed to load events: \(error.localizedDescription)"
-                print("Error fetching events: \(error)")
             }
             
             isLoading = false
         }
         
         private func generateCategories() {
-            let grouped = Dictionary(grouping: events, by: { $0.eventTypeName })
-            self.categories = grouped.map { (typeName, eventsInType) -> Category in
-                let eventType = Category.EventType.allCases.first { $0.title == typeName }
-                                
+            let grouped = Dictionary(grouping: events, by: { $0.eventTypeId ?? 0 })
+            
+            self.categories = grouped.compactMap { (typeId, eventsInType) -> Category? in
+                guard typeId != 0,
+                      let eventType = Category.EventType(rawValue: typeId) else {
+                    return nil
+                }
+                
                 return Category(
-                    id: eventType?.rawValue ?? typeName.hashValue,
-                    title: typeName,
-                    eventTypeId: eventType.map { [$0.rawValue] } ?? []
+                    id: eventType.rawValue,
+                    title: eventType.title,
+                    eventTypeId: [eventType.rawValue]
                 )
             }
             .sorted { $0.title < $1.title }

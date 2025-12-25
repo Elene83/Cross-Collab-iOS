@@ -30,6 +30,10 @@ class TokenManager {
         return userId != 0 ? userId : nil
     }
     
+    func getAccessToken() -> String? {
+        return getToken()
+    }
+    
     func getUserName() -> String? {
         return UserDefaults.standard.string(forKey: userNameKey)
     }

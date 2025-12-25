@@ -3,7 +3,7 @@ import Foundation
 final class NetworkManager {
     static let shared = NetworkManager()
     
-    private let baseURL = "https://api.in-vent.online/api"
+     let baseURL = "https://api.in-vent.online/api"
 
     private let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -58,4 +58,65 @@ final class NetworkManager {
         
         return try decoder.decode(T.self, from: data)
     }
-}
+    
+    func postData<T: Encodable>(to endpoint: String, body: T) async throws {
+           guard let url = URL(string: baseURL + endpoint) else {
+               throw URLError(.badURL)
+           }
+           
+           var request = URLRequest(url: url)
+           request.httpMethod = "POST"
+           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+           request.setValue("application/json", forHTTPHeaderField: "Accept")
+           
+           if let token = TokenManager.shared.getAccessToken() {
+               request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+           }
+           
+           request.httpBody = try JSONEncoder().encode(body)
+           
+           let (_, response) = try await URLSession.shared.data(for: request)
+           
+           guard let httpResponse = response as? HTTPURLResponse else {
+               throw URLError(.badServerResponse)
+           }
+                      
+           guard (200...299).contains(httpResponse.statusCode) else {
+               throw URLError(.badServerResponse)
+           }
+       }
+       
+    func deleteData(from endpoint: String, queryParams: [String: String?]? = nil) async throws {
+        var components = URLComponents(string: baseURL + endpoint)
+        
+        if let queryParams = queryParams {
+            components?.queryItems = queryParams.compactMap { key, value in
+                guard let value = value else { return nil }
+                return URLQueryItem(name: key, value: value)
+            }
+        }
+        
+        guard let url = components?.url else {
+            throw URLError(.badURL)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        if let token = TokenManager.shared.getAccessToken() {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        let (_, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+                
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+    }
+   }
+
