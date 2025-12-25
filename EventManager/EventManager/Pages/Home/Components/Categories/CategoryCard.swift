@@ -3,6 +3,7 @@ import SwiftUI
 struct CategoryCard: View {
     let category: Category
     let color: String
+    let allEvents: [Event]  
     
     var body: some View {
         VStack(spacing: 2) {
@@ -10,7 +11,7 @@ struct CategoryCard: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
-                .foregroundStyle(Color(color)) 
+                .foregroundStyle(Color(color))
             
             Text(category.title)
                 .font(.system(size: 14))
@@ -19,7 +20,7 @@ struct CategoryCard: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 8)
             
-            Text("\(category.eventCount.count) events")
+            Text("\(category.eventCount(from: allEvents)) events")
                 .font(.system(size: 12))
                 .foregroundStyle(.gray)
         }

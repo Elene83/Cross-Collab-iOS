@@ -20,9 +20,7 @@ class Formatters {
     func timeRange(for event: Event) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
-        let start = formatter.string(from: event.startDateTime)
-        let end = formatter.string(from: event.endDateTime)
-        return "\(start) - \(end)"
+        return formatter.string(from: event.startDateTime)
     }
     
     func formatStartDate(for event: Event) -> String {

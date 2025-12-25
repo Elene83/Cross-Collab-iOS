@@ -2,11 +2,16 @@ import SwiftUI
 
 struct BrowseCategoryView: View {
     let category: Category
+    let allEvents: [Event] 
     @Environment(\.dismiss) private var dismiss
     @State private var selectedFilters: Set<String> = []
     
+    var categoryEvents: [Event] {
+        category.events(from: allEvents)
+    }
+    
     var filteredEvents: [Event] {
-        category.eventCount.filtered(by: selectedFilters)
+        categoryEvents.filtered(by: selectedFilters)
     }
     
     var body: some View {
@@ -31,7 +36,7 @@ struct BrowseCategoryView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
                 
-                CategoryFilter(selectedFilters: $selectedFilters, events: category.eventCount)
+                CategoryFilter(selectedFilters: $selectedFilters, events: categoryEvents)
                 
                 if filteredEvents.isEmpty {
                     VStack(spacing: 12) {

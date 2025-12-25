@@ -8,6 +8,8 @@ class MyEventsViewModel: ObservableObject {
     @Published var selectedView: Int = 0
     @Published var selectedDate: Date = Date()
     @Published var currentMonth: Date = Date()
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
     
     var nextUpcomingEvent: Event? {
         events
@@ -48,12 +50,24 @@ class MyEventsViewModel: ObservableObject {
     }
     
     init() {
-        loadEvents()
+        Task {
+            await loadEvents()
+        }
     }
     
-    func loadEvents() {
-        //apidan es
-        self.events = DummyEvents.sampleEvents
+    func loadEvents() async {
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            let response: EventsResponse = try await NetworkManager.shared.getData(from: "api/events")
+            self.events = response.items
+        } catch {
+            self.errorMessage = "Failed to load events: \(error.localizedDescription)"
+            print("Error fetching events: \(error)")
+        }
+        
+        isLoading = false
     }
     
     func hasEvents(for date: Date) -> Bool {
@@ -96,8 +110,10 @@ class MyEventsViewModel: ObservableObject {
         date.formatted(date: .omitted, time: .shortened)
     }
     
-    func formatEventDateTime(_ startDate: Date, _ endDate: Date) -> String {
-        "\(formatEventDate(startDate)), \(formatEventTime(startDate)) - \(formatEventTime(endDate))"
+    func formatEventDateTime(_ startDateTime: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy 'at' h:mm a"
+        return formatter.string(from: startDateTime)
     }
     
     func getEventTypeName(for typeId: Int) -> String {

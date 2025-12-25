@@ -9,7 +9,7 @@ struct HomeView: View {
                 VStack(spacing: 24) {
                     Header()
                     EventsTable(events: vm.events)
-                    CategoryTable(categories: vm.categories)
+                    CategoryTable(categories: vm.categories, allEvents: vm.events)
                     TrendingTable(events: vm.events)
                     QuestionsTable(faqs: vm.faqs)
                 }
@@ -19,8 +19,11 @@ struct HomeView: View {
                 DetailsView(event: event)
             }
             .navigationDestination(for: Category.self) { category in
-                BrowseCategoryView(category: category)
+                BrowseCategoryView(category: category, allEvents: vm.events)
             }
+        }
+        .task {
+            await vm.fetchEvents()
         }
     }
 }

@@ -23,7 +23,7 @@ struct DetailsView: View {
                 
                 DetailsHeader(
                     imageUrl: event.imageUrl,
-                    eventTypeId: event.eventTypeId,
+                    eventTypeId: event.eventTypeId ?? 0,
                     title: event.title
                 )
                 
@@ -66,28 +66,32 @@ struct DetailsView: View {
                 
                 Divider()
                 
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Agenda")
-                        .font(.system(size: 20))
-                        .foregroundStyle(Color("AppBlack"))
+                if let agenda = event.agenda, !agenda.isEmpty {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Agenda")
+                            .font(.system(size: 20))
+                            .foregroundStyle(Color("AppBlack"))
+                        
+                        DetailsAgenda(agenda: agenda)
+                    }
+                    .padding(.horizontal, 16)
                     
-                    DetailsAgenda(agenda: event.agenda)
-                }
-                .padding(.horizontal, 16)
-                
-                if !event.speakers.isEmpty {
                     Divider()
-                    
+                }
+                
+                if let speakers = event.speakers, !speakers.isEmpty {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Featured Speakers")
                             .font(.system(size: 20))
                             .foregroundStyle(Color("AppBlack"))
                         
-                        ForEach(event.speakers) { speaker in
+                        ForEach(speakers) { speaker in
                             DetailsSpeaker(speaker: speaker)
                         }
                     }
                     .padding(.horizontal, 16)
+                    
+                    Divider()
                 }
                 
                 Spacer()

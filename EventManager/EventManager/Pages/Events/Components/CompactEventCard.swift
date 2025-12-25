@@ -21,7 +21,7 @@ struct CompactEventCard: View {
                 HStack(spacing: 4) {
                     Image(systemName: "calendar")
                         .font(.caption)
-                    Text(viewModel.getEventTypeName(for: event.eventTypeId))
+                    Text(viewModel.getEventTypeName(for: event.eventTypeId ?? 0))
                         .font(.caption)
                 }
                 .foregroundColor(.secondary)

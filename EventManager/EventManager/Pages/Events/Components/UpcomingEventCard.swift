@@ -21,7 +21,7 @@ struct UpcomingEventCard: View {
                 Image(systemName: "clock")
                     .foregroundColor(.gray)
                     .frame(width: 16)
-                Text(viewModel.formatEventDateTime(event.startDateTime, event.endDateTime))
+                Text(viewModel.formatEventDateTime(event.startDateTime))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }

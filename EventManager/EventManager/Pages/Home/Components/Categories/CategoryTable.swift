@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CategoryTable: View {
     let categories: [Category]
+    let allEvents: [Event] 
     
     let columns = [
         GridItem(.flexible()),
@@ -26,7 +27,7 @@ struct CategoryTable: View {
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(Array(categories.prefix(6).enumerated()), id: \.element.id) { index, category in
                         NavigationLink(value: category) {
-                            CategoryCard(category: category, color: colors[index])
+                            CategoryCard(category: category, color: colors[index], allEvents: allEvents)
                         }
                     }
                 }
