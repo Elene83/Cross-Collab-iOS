@@ -10,7 +10,7 @@ class FilteredCategoryViewModel: ErrorHandling {
     
     private let apiService: APIServiceProtocol
     
-    init(apiService: APIServiceProtocol = MockAPIService.shared) {
+    init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
     }
     
@@ -23,7 +23,11 @@ class FilteredCategoryViewModel: ErrorHandling {
             events = try await apiService.getEvents(
                 eventTypeId: eventTypeId,
                 location: nil,
+                startDate: nil,
+                endDate: nil,
                 searchKeyword: nil,
+                upcomingOnly: nil,
+                activeOnly: nil,
                 onlyAvailable: nil
             )
         } catch {

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct UpdatesView: View {
+    @EnvironmentObject var appCoordinator: AppCoordinator
     @State private var viewModel = UpdatesViewModel()
     @State private var selectedEvent: UpdateEventDetail?
     @State private var selectedNotificationId: Int?
@@ -69,14 +70,14 @@ struct UpdatesView: View {
                 get: { selectedEvent != nil },
                 set: { if !$0 { selectedEvent = nil } }
             ))
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-                .onDisappear {
-                    if let notificationId = selectedNotificationId {
-                        viewModel.markAsReadById(notificationId)
-                        selectedNotificationId = nil
-                    }
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+            .onDisappear {
+                if let notificationId = selectedNotificationId {
+                    viewModel.markAsReadById(notificationId)
+                    selectedNotificationId = nil
                 }
+            }
         }
     }
 }

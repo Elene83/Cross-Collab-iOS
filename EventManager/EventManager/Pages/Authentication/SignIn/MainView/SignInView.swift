@@ -13,14 +13,21 @@ struct SignInView: View {
                 
                 VStack(alignment: .leading, spacing: 24) {
                     SignInEmailField(email: $viewModel.email)
+                        .onChange(of: viewModel.email) { oldValue, newValue in
+                            viewModel.checkForSavedPassword()
+                        }
                     
                     SignInPasswordField(
                         password: $viewModel.password,
-                        showPassword: $showPassword
+                        showPassword: $showPassword,
+                        showHint: viewModel.showPasswordHint,
+                        onUseSavedPassword: {
+                            viewModel.useSavedPassword()
+                        }
                     )
                     
                     RememberMeForgotSection(
-                        rememberMe: .constant(false),
+                        rememberMe: $viewModel.rememberMe,
                         onForgotPassword: {
                             coordinator.push(.forgotPassword)
                         }
@@ -30,13 +37,8 @@ struct SignInView: View {
                         Task {
                             await viewModel.signIn()
                             let token = TokenManager.shared.getToken()
-                            print("DEBUG: Checking token before navigation: \(token ?? "NULL")")
-                            
                             if token != nil {
-                                print("DEBUG: Token exists, calling appCoordinator.login()")
-                                appCoordinator.login() 
-                            } else {
-                                print("DEBUG: Navigation failed - No token found")
+                                appCoordinator.login()
                             }
                         }
                     }) {
