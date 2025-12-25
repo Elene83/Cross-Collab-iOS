@@ -4,18 +4,15 @@ import SwiftUI
 @MainActor
 @Observable
 class BrowseEventsViewModel: ErrorHandling {
-    // MARK: Events Properties
     var events: [EventListDto] = []
     var eventTypes: [EventTypeDto] = []
     var isLoading = false
     var errorMessage: String?
     
-    // MARK: Search & Filter Properties
     var searchText = ""
     var showFilters = false
     var selectedEventType: Int?
     
-    // MARK: Filter Properties
     var onlyAvailable = false
     var selectedLocation = ""
     var selectedDateRange: DateRange = .all
@@ -23,16 +20,12 @@ class BrowseEventsViewModel: ErrorHandling {
     
     private let apiService: APIServiceProtocol
     
-    init(apiService: APIServiceProtocol = MockAPIService.shared) {
+    init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
     }
     
-    // MARK: Computed Properties
     var hasActiveFilters: Bool {
-        onlyAvailable ||
-        !selectedLocation.isEmpty ||
-        selectedDateRange != .all ||
-        selectedEventTypeId != nil
+        onlyAvailable || !selectedLocation.isEmpty || selectedDateRange != .all || selectedEventTypeId != nil
     }
     
     var activeFiltersCount: Int {
@@ -44,18 +37,85 @@ class BrowseEventsViewModel: ErrorHandling {
         return count
     }
     
-    // MARK: Initial Load
     func loadInitialData() async {
-        await loadEventTypes()
-        await loadEvents()
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            let fetchedEvents = try await apiService.getEvents()
+            self.events = fetchedEvents
+            
+            let uniqueTypeNames = Array(Set(fetchedEvents.map { $0.eventTypeName }))
+            self.eventTypes = uniqueTypeNames.enumerated().map { index, name in
+                EventTypeDto(id: index + 1, name: name, description: nil)
+            }
+        } catch {
+            handleError(error)
+        }
     }
     
-    // MARK: Events Loading
+    func refreshEvents() async {
+        let dates = calculateDates(for: selectedDateRange)
+        
+        await loadEvents(
+            eventTypeId: selectedEventType,
+            searchKeyword: searchText.isEmpty ? nil : searchText,
+            onlyAvailable: onlyAvailable ? true : nil,
+            location: selectedLocation.isEmpty ? nil : selectedLocation,
+            startDate: dates.start,
+            endDate: dates.end
+        )
+    }
+        
+    func handleEventTypeSelection(_ typeId: Int?) {
+        selectedEventType = typeId
+        Task {
+            await refreshEvents()
+        }
+    }
+    
+    func handleSearchChange(_ newValue: String) {
+        Task {
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            await refreshEvents()
+        }
+    }
+    
+    
+    func resetFilters() {
+        onlyAvailable = false
+        selectedLocation = ""
+        selectedDateRange = .all
+        selectedEventTypeId = nil
+        Task { await refreshEvents() }
+    }
+    
+    func getFilterParameters() -> EventFilterParameters {
+        let dates = calculateDates(for: selectedDateRange)
+        return EventFilterParameters(
+            onlyAvailable: onlyAvailable ? true : nil,
+            location: selectedLocation.isEmpty ? nil : selectedLocation,
+            startDate: dates.start,
+            endDate: dates.end,
+            eventTypeId: selectedEventTypeId
+        )
+    }
+    
+    func applyFilters(_ parameters: EventFilterParameters) {
+        self.onlyAvailable = parameters.onlyAvailable ?? false
+        self.selectedLocation = parameters.location ?? ""
+        Task {
+            await refreshEvents()
+        }
+    }
+    
     func loadEvents(
         eventTypeId: Int? = nil,
         searchKeyword: String? = nil,
         onlyAvailable: Bool? = nil,
-        location: String? = nil
+        location: String? = nil,
+        startDate: Date? = nil,
+        endDate: Date? = nil
     ) async {
         isLoading = true
         errorMessage = nil
@@ -65,6 +125,8 @@ class BrowseEventsViewModel: ErrorHandling {
             events = try await apiService.getEvents(
                 eventTypeId: eventTypeId,
                 location: location,
+                startDate: startDate,
+                endDate: endDate,
                 searchKeyword: searchKeyword,
                 onlyAvailable: onlyAvailable
             )
@@ -73,67 +135,21 @@ class BrowseEventsViewModel: ErrorHandling {
         }
     }
     
-    func loadEventTypes() async {
-        do {
-            eventTypes = try await apiService.getEventTypes()
-        } catch {
-            handleError(error)
-        }
-    }
-    
-    func refreshEvents() async {
-        await loadEvents()
-    }
-    
-    // MARK: Event Type Selection
-    func handleEventTypeSelection(_ typeId: Int?) {
-        selectedEventType = typeId
-        Task {
-            await loadEvents(
-                eventTypeId: typeId,
-                searchKeyword: searchText.isEmpty ? nil : searchText,
-                onlyAvailable: onlyAvailable ? true : nil,
-                location: selectedLocation.isEmpty ? nil : selectedLocation
-            )
-        }
-    }
-    
-    // MARK: Search Handling
-    func handleSearchChange(_ newValue: String) {
-        Task {
-            try? await Task.sleep(nanoseconds: 500_000_000)
-            await loadEvents(
-                eventTypeId: selectedEventType,
-                searchKeyword: newValue.isEmpty ? nil : newValue
-            )
-        }
-    }
-    
-    // MARK: Filter Methods
-    func resetFilters() {
-        onlyAvailable = false
-        selectedLocation = ""
-        selectedDateRange = .all
-        selectedEventTypeId = nil
-    }
-    
-    func getFilterParameters() -> EventFilterParameters {
-        EventFilterParameters(
-            onlyAvailable: onlyAvailable ? true : nil,
-            location: selectedLocation.isEmpty ? nil : selectedLocation,
-            dateRange: selectedDateRange != .all ? selectedDateRange : nil,
-            eventTypeId: selectedEventTypeId
-        )
-    }
-    
-    func applyFilters(_ parameters: EventFilterParameters) {
-        Task {
-            await loadEvents(
-                eventTypeId: parameters.eventTypeId,
-                searchKeyword: searchText.isEmpty ? nil : searchText,
-                onlyAvailable: parameters.onlyAvailable,
-                location: parameters.location
-            )
+    private func calculateDates(for range: DateRange) -> (start: Date?, end: Date?) {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: Date())
+        
+        switch range {
+        case .today:
+            return (startOfToday, calendar.date(byAdding: .day, value: 1, to: startOfToday))
+        case .thisWeek:
+            return (startOfToday, calendar.date(byAdding: .day, value: 7, to: startOfToday))
+        case .thisMonth:
+            return (startOfToday, calendar.date(byAdding: .month, value: 1, to: startOfToday))
+        case .nextMonth:
+            return (startOfToday, calendar.date(byAdding: .month, value: 2, to: startOfToday))
+        case .all:
+            return (nil, nil)
         }
     }
 }
