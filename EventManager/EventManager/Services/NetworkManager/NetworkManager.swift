@@ -50,9 +50,6 @@ final class NetworkManager {
                 return URLQueryItem(name: key, value: value)
             }
         }
-<<<<<<< HEAD
-        let (data, _) = try await URLSession.shared.data(from: url)
-=======
         
         guard let url = components?.url else { throw URLError(.badURL) }
         
@@ -61,7 +58,6 @@ final class NetworkManager {
         if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
             throw URLError(.badServerResponse)
         }
->>>>>>> main
         
         return try decoder.decode(T.self, from: data)
     }
