@@ -11,6 +11,8 @@ class MyEventsViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
+    private let apiService = APIService.shared
+    
     var nextUpcomingEvent: Event? {
         events
             .filter { $0.startDateTime > Date() }
@@ -59,12 +61,38 @@ class MyEventsViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
+        guard let userId = TokenManager.shared.getUserId() else {
+            errorMessage = "Please log in to view your events"
+            isLoading = false
+            return
+        }
+        
         do {
-            let response: EventsResponse = try await NetworkManager.shared.getData(from: "api/events")
-            self.events = response.items
+            let registrations = try await apiService.getMyRegistrations(userId: userId)
+            let registeredEventIds = Set(registrations.map { $0.eventId })
+            
+            var allEvents: [Event] = []
+            var currentPage = 1
+            var hasMore = true
+            
+            while hasMore {
+                let response: EventsResponse = try await NetworkManager.shared.getData(
+                    from: "/Events",
+                    queryParams: [
+                        "pageSize": "100",
+                        "pageNumber": String(currentPage)
+                    ]
+                )
+                
+                allEvents.append(contentsOf: response.items)
+                hasMore = response.hasNext
+                currentPage += 1
+            }
+            
+            self.events = allEvents.filter { registeredEventIds.contains($0.id) }
+                        
         } catch {
             self.errorMessage = "Failed to load events: \(error.localizedDescription)"
-            print("Error fetching events: \(error)")
         }
         
         isLoading = false

@@ -49,4 +49,23 @@ class APIService: APIServiceProtocol {
     func getCurrentUser() async throws -> UserDto {
         return try await network.getData(from: "/Auth/me")
     }
-}
+    
+    func registerForEvent(eventId: Int, userId: Int) async throws {
+          let body = [
+              "eventId": eventId,
+              "userId": userId
+          ]
+          
+          try await network.postData(to: "/Registrations", body: body)
+      }
+    
+    func getMyRegistrations(userId: Int) async throws -> [UserRegistrationDto] {
+        return try await network.getData(from: "/Registrations/user/\(userId)")
+    }
+    
+    func unregisterFromEvent(registrationId: Int) async throws {
+        try await network.deleteData(from: "/Registrations/\(registrationId)")
+    }
+    
+  }
+

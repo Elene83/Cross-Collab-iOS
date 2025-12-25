@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DetailsView: View {
-    var event: Event
+    @State var event: Event
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel = ViewModel()
     
@@ -33,7 +33,12 @@ struct DetailsView: View {
                 Divider()
                 
                 VStack(spacing: 8) {
-                    Button(action: { viewModel.handleRegistration(for: event) }) {
+                    Button(action: {
+                        Task {
+                            await viewModel.handleRegistration(for: event)
+                            await refreshEvent()
+                        }
+                    }) {
                         HStack(spacing: 8) {
                             if viewModel.isLoading {
                                 ProgressView()
@@ -99,6 +104,24 @@ struct DetailsView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .task {
+            await viewModel.loadRegistrationStatus(for: event)
+        }
+    }
+    
+    private func refreshEvent() async {
+        do {
+            let response: EventsResponse = try await NetworkManager.shared.getData(
+                from: "/Events",
+                queryParams: ["pageSize": "100"]
+            )
+            
+            if let updatedEvent = response.items.first(where: { $0.id == event.id }) {
+                event = updatedEvent
+            }
+        } catch {
+            print("Could not refresh event: \(error)")
+        }
     }
 }
 
