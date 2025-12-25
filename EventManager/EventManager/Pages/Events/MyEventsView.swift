@@ -9,7 +9,6 @@ struct MyEventsView: View {
             VStack(spacing: 16) {
                 Text("My Events")
                     .font(.title)
-                    .fontWeight(.bold)
                 
                 Picker("View", selection: $viewModel.selectedView) {
                     Text("List").tag(0)
@@ -20,12 +19,6 @@ struct MyEventsView: View {
             }
             .padding(.vertical)
             .background(Color.white)
-            .overlay(
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(Color.gray.opacity(0.2)),
-                alignment: .bottom
-            )
             
             if viewModel.selectedView == 0 {
                 EventListView(events: viewModel.events)
@@ -33,7 +26,6 @@ struct MyEventsView: View {
                 EventCalendarView(viewModel: viewModel)
             }
         }
-        .background(Color(.systemGroupedBackground))
     }
 }
 
@@ -68,5 +60,5 @@ struct MapViewRepresentable: UIViewRepresentable {
 }
 
 #Preview {
-    MyEventsView()
+    MainTabView()
 }

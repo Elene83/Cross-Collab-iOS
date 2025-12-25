@@ -5,7 +5,7 @@ struct EventCalendarView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 2) {
                 if let upcomingEvent = viewModel.nextUpcomingEvent {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Next Upcoming Event")
@@ -40,8 +40,14 @@ struct EventCalendarView: View {
                         .padding(.horizontal)
                     }
                 }
+                .padding(.vertical, 32)
+                .background(Color("AppBlue").opacity(0.1))
             }
             .padding(.vertical)
         }
     }
+}
+
+#Preview {
+    MainTabView()
 }

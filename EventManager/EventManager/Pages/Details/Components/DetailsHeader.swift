@@ -23,7 +23,7 @@ struct DetailsHeader: View {
                 .clipped()
             } else {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(Color("AppViolet").opacity(0.3))
                     .frame(maxWidth: .infinity)
                     .frame(height: 240)
                     .overlay(
@@ -38,7 +38,7 @@ struct DetailsHeader: View {
                     .font(.system(size: 12))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(Color("AppLightGray"))
+                    .background(Color("AppViolet").opacity(0.3))
                     .foregroundColor(Color("AppBlack"))
                     .cornerRadius(15)
                     .padding(.horizontal, 10)

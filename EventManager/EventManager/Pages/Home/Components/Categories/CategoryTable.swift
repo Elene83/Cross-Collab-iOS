@@ -9,6 +9,8 @@ struct CategoryTable: View {
         GridItem(.flexible())
     ]
     
+    let colors = ["AppViolet", "AppBlue", "AppGreen", "AppGreen", "AppBlue", "AppViolet"]
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Browse By Category")
@@ -22,9 +24,9 @@ struct CategoryTable: View {
                     .frame(height: 80)
             } else {
                 LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(categories.prefix(6)) { category in
+                    ForEach(Array(categories.prefix(6).enumerated()), id: \.element.id) { index, category in
                         NavigationLink(value: category) {
-                            CategoryCard(category: category)
+                            CategoryCard(category: category, color: colors[index])
                         }
                     }
                 }

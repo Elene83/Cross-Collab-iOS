@@ -9,17 +9,17 @@ struct EventCard: View {
                 VStack(spacing: 2) {
                     Text(Formatters.shared.monthAbbreviation(for: event))
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color("AppGray"))
+                        .foregroundStyle(Color("AppViolet"))
                     Text(Formatters.shared.dayOfMonth(for: event))
                         .font(.system(size: 24))
-                        .foregroundStyle(Color("AppDarkGray"))
+                        .foregroundStyle(Color("AppViolet"))
                 }
                 .frame(width: 50)
                 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(event.title)
                         .font(.system(size: 16))
-                        .foregroundStyle(Color("AppDarkGray"))
+                        .foregroundStyle(Color("AppBlack"))
                         .lineLimit(2)
                     
                     HStack(spacing: 4) {
@@ -85,6 +85,7 @@ struct EventCard: View {
         }
         .padding(16)
         .frame(height: 174)
+        .background(Color("AppBlue").opacity(0.1))
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .overlay(

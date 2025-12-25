@@ -38,7 +38,11 @@ struct CompactEventCard: View {
             Spacer()
         }
         .padding()
-        .background(Color.blue.opacity(0.05))
+        .background(Color("AppWhite"))
         .cornerRadius(8)
     }
+}
+
+#Preview {
+    MainTabView()
 }

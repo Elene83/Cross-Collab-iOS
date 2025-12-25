@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E37178F62EFC45B800609077 /* Exceptions for "EventManager" folder in "EventManager" target */ = {
+		FA00126B2EFC52F300B54497 /* Exceptions for "EventManager" folder in "EventManager" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		FA3FB71C2EF67A2300BBB1A0 /* EventManager */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E37178F62EFC45B800609077 /* Exceptions for "EventManager" folder in "EventManager" target */,
+				FA00126B2EFC52F300B54497 /* Exceptions for "EventManager" folder in "EventManager" target */,
 			);
 			path = EventManager;
 			sourceTree = "<group>";

@@ -104,3 +104,7 @@ class MyEventsViewModel: ObservableObject {
         Category.EventType(rawValue: typeId)?.title ?? "Event"
     }
 }
+
+#Preview {
+    MainTabView()
+}
