@@ -8,7 +8,7 @@ struct HomeView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(spacing: 24) {
-                        Header()
+                        Header(name: TokenManager.shared.getUserName())
                         EventsTable(events: vm.events)
                         CategoryTable(categories: vm.categories, allEvents: vm.events)
                         TrendingTable(events: vm.events)

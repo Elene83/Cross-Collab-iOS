@@ -4,7 +4,7 @@ import Foundation
 class AuthService {
     static let shared = AuthService()
     
-    private let baseURL = "http://35.205.108.13:5001/api"
+    private let baseURL = "https://backend-staging-h6d2h7zhoa-ew.a.run.app"
     
     private init() {}
     
@@ -22,7 +22,13 @@ class AuthService {
         return try await performRequest(url: url, method: "POST", body: body)
     }
     
-    func register(email: String, password: String, fullName: String) async throws -> AuthResponse {
+    func register(
+        email: String,
+        password: String,
+        fullName: String,
+        phoneNumber: String,
+        departmentId: Int       
+    ) async throws -> AuthResponse {
         let urlString = "\(baseURL)/Auth/register"
         guard let url = URL(string: urlString) else {
             throw AuthError.invalidResponse
@@ -30,8 +36,10 @@ class AuthService {
         
         let body = RegisterRequest(
             email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+            phoneNumber: phoneNumber.trimmingCharacters(in: .whitespacesAndNewlines),
             password: password,
-            fullName: fullName.trimmingCharacters(in: .whitespacesAndNewlines)
+            fullName: fullName.trimmingCharacters(in: .whitespacesAndNewlines),
+            departmentId: departmentId
         )
         
         return try await performRequest(url: url, method: "POST", body: body)

@@ -20,10 +20,20 @@ struct LoginRequest: Codable {
 
 struct RegisterRequest: Codable {
     let email: String
+    let phoneNumber: String
     let password: String
     let fullName: String
+    let departmentId: Int
 }
 
 struct ForgotPasswordRequest: Codable {
     let email: String
+}
+
+struct LoginResponse: Codable {
+    let token: String
+    let userId: Int
+    let fullName: String
+    let role: String
+    let expiresAt: String
 }
