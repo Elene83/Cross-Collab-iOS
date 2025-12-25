@@ -2,6 +2,7 @@ import SwiftUI
 
 class AppCoordinator: ObservableObject {
     @Published var isAuthenticated: Bool = false
+    @Published var selectedTab: Int = 0 
     
     init() {
         self.isAuthenticated = TokenManager.shared.isLoggedIn()
