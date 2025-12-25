@@ -4,7 +4,7 @@ import Foundation
 class AuthService {
     static let shared = AuthService()
     
-    private let baseURL = "https://backend-staging-h6d2h7zhoa-ew.a.run.app"
+    private let baseURL = "https://api.in-vent.online/api"
     
     private init() {}
     
@@ -27,7 +27,7 @@ class AuthService {
         password: String,
         fullName: String,
         phoneNumber: String,
-        departmentId: Int       
+        departmentId: Int
     ) async throws -> AuthResponse {
         let urlString = "\(baseURL)/Auth/register"
         guard let url = URL(string: urlString) else {
@@ -122,8 +122,14 @@ class AuthService {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = 30
         
+        print("🔥 REQUEST URL: \(url.absoluteString)")
+        print("🔥 METHOD: \(method)")
+        
         do {
             request.httpBody = try JSONEncoder().encode(body)
+            if let jsonString = String(data: request.httpBody!, encoding: .utf8) {
+                print("🔥 BODY: \(jsonString)")
+            }
         } catch {
             throw AuthError.decodingError
         }
@@ -133,6 +139,11 @@ class AuthService {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw AuthError.invalidResponse
+            }
+            
+            print("🔥 RESPONSE CODE: \(httpResponse.statusCode)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("🔥 RESPONSE: \(responseString)")
             }
             
             guard httpResponse.statusCode == 200 else {
@@ -149,4 +160,5 @@ class AuthService {
             throw AuthError.networkError
         }
     }
+ 
 }
