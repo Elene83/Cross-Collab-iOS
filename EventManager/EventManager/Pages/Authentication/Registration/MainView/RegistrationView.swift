@@ -39,14 +39,16 @@ struct RegistrationView: View {
                             timeRemaining = 50
                         }
                     )
+                    DepartmentSection(
+                        selectedDepartmentId: $viewModel.selectedDepartmentId,
+                        departments: viewModel.departments
+                    )
                     
                     OTPSection(
                         otpCode: $viewModel.otpCode,
                         timeRemaining: $timeRemaining
                     )
-                    
-                    DepartmentSection(selectedDepartmentId: $viewModel.selectedDepartmentId)
-                    
+                                        
                     PasswordSection(
                         password: $viewModel.password,
                         showPassword: $showPassword
@@ -122,6 +124,9 @@ struct RegistrationView: View {
             Button("OK", role: .cancel) { }
         } message: {
             Text(viewModel.errorMessage ?? "An error occurred")
+        }
+        .task {
+                    await viewModel.fetchDepartments()
         }
     }
 }

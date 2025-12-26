@@ -5,11 +5,16 @@ struct AuthResponse: Codable {
     let userId: Int
     let fullName: String
     let role: String
+    let departmentId: Int?  
     let expiresAt: String
     
-    var expirationDate: Date? {
-        let formatter = ISO8601DateFormatter()
-        return formatter.date(from: expiresAt)
+    enum CodingKeys: String, CodingKey {
+        case token
+        case userId
+        case fullName
+        case role
+        case departmentId
+        case expiresAt
     }
 }
 
@@ -35,7 +40,17 @@ struct LoginResponse: Codable {
     let userId: Int
     let fullName: String
     let role: String
+    let departmentId: Int?
     let expiresAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case token
+        case userId
+        case fullName
+        case role
+        case departmentId  
+        case expiresAt
+    }
 }
 
 

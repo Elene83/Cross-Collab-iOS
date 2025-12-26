@@ -4,7 +4,7 @@ import Observation
 @Observable
 @MainActor
 class ProfileViewModel {
-    var userProfile: UserProfile?
+    var userProfile: UserProfileDto?
     var isLoading = false
     var errorMessage: String?
     var showError = false
@@ -20,10 +20,9 @@ class ProfileViewModel {
            let userName = TokenManager.shared.getUserName(),
            let userRole = TokenManager.shared.getUserRole() {
             
-            self.userProfile = UserProfile(
+            self.userProfile = UserProfileDto(
                 id: userId,
-                fullName: userName,
-                email: "",
+                email: "", fullName: userName,
                 role: userRole
             )
         }
