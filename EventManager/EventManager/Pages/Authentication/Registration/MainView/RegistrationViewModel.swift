@@ -16,6 +16,7 @@ class RegistrationViewModel {
     var phoneNumber = ""
     var otpCode: [String] = Array(repeating: "", count: 6)
     var selectedDepartmentId: Int = 0
+    var departments: [Department] = []
     
     func register() async -> Bool {
         guard validateInput() else { return false }
@@ -79,6 +80,12 @@ class RegistrationViewModel {
         }
         showError = true
     }
+    func fetchDepartments() async {
+            do {
+                self.departments = try await AuthService.shared.getDepartments()
+            } catch {
+            }
+        }
     
     private func validateInput() -> Bool {
         if firstName.trimmingCharacters(in: .whitespaces).isEmpty {

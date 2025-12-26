@@ -46,9 +46,10 @@ struct NotificationGroup: Identifiable {
     let notifications: [UpdateNotification]
 }
 
-struct UserProfileDto: Codable, Identifiable {
-    let id: Int
-    let email: String
-    let fullName: String
-    let role: String
-}
+//struct UserProfileDto: Codable, Identifiable {
+//    let id: Int
+//    let email: String
+//    let fullName: String
+//    let role: String
+//    let departmentId: Int?  
+//}

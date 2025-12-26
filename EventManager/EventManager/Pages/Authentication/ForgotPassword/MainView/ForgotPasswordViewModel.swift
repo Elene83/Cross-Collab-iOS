@@ -23,6 +23,9 @@ class ForgotPasswordViewModel {
             showSuccess = true
         } catch {
             isLoading = false
+            if error is AuthError {
+            }
+            
             errorMessage = "This feature is temporarily unavailable."
             showError = true
         }

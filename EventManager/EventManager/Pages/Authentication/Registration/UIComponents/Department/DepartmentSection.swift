@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct DepartmentSection: View {
-    @Binding var selectedDepartmentId: Int  
+    @Binding var selectedDepartmentId: Int
+    var departments: [Department]
     
     private var selectedDepartmentName: String {
-        Department.from(id: selectedDepartmentId)?.name ?? "Select Department"
+        departments.first(where: { $0.id == selectedDepartmentId })?.name ?? "Select Department"
     }
     
     var body: some View {
@@ -14,9 +15,13 @@ struct DepartmentSection: View {
                 .foregroundColor(.primary)
             
             Menu {
-                ForEach(Department.allCases) { department in
-                    Button(department.name) {
-                        selectedDepartmentId = department.id
+                if departments.isEmpty {
+                    Text("Loading departments...")
+                } else {
+                    ForEach(departments) { department in
+                        Button(department.name) {
+                            selectedDepartmentId = department.id
+                        }
                     }
                 }
             } label: {
@@ -24,14 +29,21 @@ struct DepartmentSection: View {
                     Text(selectedDepartmentName)
                         .font(.system(size: 15))
                         .foregroundColor(selectedDepartmentId == 0 ? .gray : .primary)
+                    
                     Spacer()
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
+                    
+                    if departments.isEmpty {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                    } else {
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 12))
+                            .foregroundColor(.gray)
+                    }
                 }
                 .frame(height: 48)
                 .padding(.horizontal, 16)
-                .background(Color(.appBlue).opacity(0.10))
+                .background(Color.appBlue.opacity(0.10)) 
                 .cornerRadius(8)
             }
         }

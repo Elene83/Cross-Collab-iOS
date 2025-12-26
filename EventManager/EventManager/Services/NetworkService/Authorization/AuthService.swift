@@ -56,9 +56,8 @@ class AuthService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = 30
-        
-        let body = ["email": email.trimmingCharacters(in: .whitespacesAndNewlines)]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        request.httpBody = try? JSONEncoder().encode(trimmedEmail)
         
         do {
             let (_, response) = try await URLSession.shared.data(for: request)
@@ -67,7 +66,7 @@ class AuthService {
                 throw AuthError.invalidResponse
             }
             
-            guard httpResponse.statusCode == 200 else {
+            guard (200...299).contains(httpResponse.statusCode) else {
                 throw AuthError.serverError(statusCode: httpResponse.statusCode)
             }
         } catch let error as AuthError {
@@ -76,8 +75,25 @@ class AuthService {
             throw AuthError.networkError
         }
     }
+   
+    func getDepartments() async throws -> [Department] {
+        let urlString = "\(baseURL)/Auth/departments"
+        guard let url = URL(string: urlString) else { throw AuthError.invalidResponse }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw AuthError.serverError(statusCode: (response as? HTTPURLResponse)?.statusCode ?? 500)
+        }
+        
+        return try JSONDecoder().decode([Department].self, from: data)
+    }
     
-    func getProfile(token: String) async throws -> UserProfile {
+    func getProfile(token: String) async throws -> UserProfileDto {
         let urlString = "\(baseURL)/Auth/me"
         guard let url = URL(string: urlString) else {
             throw AuthError.invalidResponse
@@ -100,7 +116,7 @@ class AuthService {
                 throw AuthError.serverError(statusCode: httpResponse.statusCode)
             }
             
-            return try JSONDecoder().decode(UserProfile.self, from: data)
+            return try JSONDecoder().decode(UserProfileDto.self, from: data)
             
         } catch let error as AuthError {
             throw error
@@ -121,14 +137,9 @@ class AuthService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = 30
-        
-        print("🔥 REQUEST URL: \(url.absoluteString)")
-        print("🔥 METHOD: \(method)")
-        
         do {
             request.httpBody = try JSONEncoder().encode(body)
-            if let jsonString = String(data: request.httpBody!, encoding: .utf8) {
-                print("🔥 BODY: \(jsonString)")
+            if String(data: request.httpBody!, encoding: .utf8) != nil {
             }
         } catch {
             throw AuthError.decodingError
@@ -140,10 +151,7 @@ class AuthService {
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw AuthError.invalidResponse
             }
-            
-            print("🔥 RESPONSE CODE: \(httpResponse.statusCode)")
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("🔥 RESPONSE: \(responseString)")
+            if String(data: data, encoding: .utf8) != nil {
             }
             
             guard httpResponse.statusCode == 200 else {
@@ -160,5 +168,6 @@ class AuthService {
             throw AuthError.networkError
         }
     }
+    
  
 }
